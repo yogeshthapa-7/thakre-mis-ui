@@ -1,0 +1,199 @@
+/* Container framework expanded to full landing page standard width */
+.gov-profile-container {
+  background: #ffffff;
+  max-width: 1400px; /* Increased from 1200px to match large viewport spreads */
+  margin: 40px auto;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+}
+
+/* Left Side Styles */
+.intro-side {
+  background: #ffffff;
+  padding: 0 0 40px 0;
+}
+
+.intro-hero-banner {
+  position: relative;
+  height: 260px; /* Sightly taller to complement the wider aspect ratio */
+  background-image: url('/thakre.jpg');
+  background-size: cover;
+  background-position: center;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.intro-hero-banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(255,255,255,0.95) 35%, rgba(255,255,255,0.2) 100%);
+  z-index: 1;
+}
+
+.intro-hero-content {
+  position: relative;
+  z-index: 2;
+}
+
+.intro-body-content {
+  padding: 44px; /* Enhanced internal padding for text alignment */
+}
+
+.underline-title {
+  font-family: 'Georgia', serif;
+  color: #134074;
+  font-weight: 700;
+  font-size: 24px;
+  margin-bottom: 8px;
+  display: inline-block;
+  position: relative;
+}
+
+.underline-title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 100%;
+  height: 2px;
+  background-color: #b21f1f;
+}
+
+.gov-btn-primary {
+  background-color: #134074;
+  color: #ffffff;
+  border: none;
+  padding: 12px 28px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.gov-btn-primary:hover {
+  background-color: #0b2e54;
+}
+
+/* Right Side Styles (Indicators Container) */
+.indicators-side {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  padding: 44px;
+  height: 100%;
+}
+
+.indicator-section-title {
+  font-family: 'Georgia', serif;
+  color: #134074;
+  font-weight: 700;
+  font-size: 26px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #cbd5e1;
+  padding-bottom: 12px;
+}
+
+/* Metric Cards Grid + Smooth Transformation Engine */
+.indicator-card-square {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 28px 20px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  
+  /* Transformation transitions */
+  will-change: transform, box-shadow;
+  transition: transform 300ms cubic-bezier(0.2, 0.65, 0.2, 1), box-shadow 300ms ease;
+}
+
+/* Hover effect rules */
+.indicator-card-square:hover {
+  transform: scale(1.035) translate3d(0, -2px, 0);
+  box-shadow: 0 12px 24px rgba(19, 64, 116, 0.08);
+  border-color: rgba(19, 64, 116, 0.15);
+}
+
+.indicator-card-icon {
+  font-size: 32px;
+  color: #134074;
+  margin-bottom: 8px;
+}
+
+.indicator-card-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: #134074;
+  margin-bottom: 12px;
+}
+
+.indicator-card-value {
+  font-size: 26px;
+  font-weight: 800;
+  color: #134074;
+  margin: 0;
+}
+
+.indicator-card-value.highlighted {
+  color: #b21f1f;
+}
+
+.indicator-card-subtext {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+/* Wide bottom metrics row + Transform Engine */
+.horizontal-metrics-bar {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 20px 24px;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  margin-top: 24px;
+  
+  will-change: transform, box-shadow;
+  transition: transform 300ms cubic-bezier(0.2, 0.65, 0.2, 1), box-shadow 300ms ease;
+}
+
+.horizontal-metrics-bar:hover {
+  transform: scale(1.015);
+  box-shadow: 0 10px 20px rgba(19, 64, 116, 0.06);
+}
+
+.horizontal-metric-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.horizontal-icon-wrapper {
+  font-size: 28px;
+  color: #134074;
+  display: flex;
+  align-items: center;
+}
+
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-delay-3 {
+  transition-delay: 0.3s;
+}

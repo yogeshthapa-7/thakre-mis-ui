@@ -1,0 +1,160 @@
+@import "leaflet/dist/leaflet.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* --- Premium Corporate Map Pin --- */
+.custom-gis-marker-pin {
+  width: 24px;
+  height: 24px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  border: 2px solid #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  position: relative;
+}
+.custom-gis-marker-pin::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background: #ffffff;
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  border-radius: 50%;
+}
+
+/* --- Leaflet Popup Box Overrides --- */
+.leaflet-popup-content-wrapper {
+  background: #ffffff !important;
+  color: #1e293b !important;
+  border-radius: 12px !important; /* Smooth rounded corners matching reference design */
+  border: 1.5px solid #1e293b !important; /* Bold crisp border frame */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  padding: 8px 12px !important;
+}
+
+/* Clear Leaflet's built-in default spacing rules */
+.leaflet-popup-content {
+  margin: 0 !important;
+  line-height: inherit !important;
+}
+
+/* Modifies the arrow tip indicator at the bottom */
+.leaflet-popup-tip-container {
+  margin-top: -1.5px !important; /* Connects border lines smoothly without gaps */
+}
+
+.leaflet-popup-tip {
+  background: #ffffff !important;
+  border-left: 1.5px solid #1e293b !important; /* Applies matching left border line to pointer */
+  border-bottom: 1.5px solid #1e293b !important; /* Applies matching bottom border line to pointer */
+  box-shadow: none !important;
+  transform: rotate(-45deg) translate(2px, -2px) !important; /* Aligns angles seamlessly */
+}
+
+/* --- Government GIS Extended Layout Utilities --- */
+.gov-gis-popup-container {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 4px;
+  background: #ffffff;
+}
+
+/* Left QR Section Container */
+.gov-gis-popup-qr-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.gov-gis-popup-qr-section .qr-wrapper {
+  width: 80px;
+  height: 80px;
+  border: 1px solid #e2e8f0;
+  padding: 4px;
+  background: #ffffff;
+  border-radius: 6px;
+}
+
+.gov-gis-popup-qr-section .qr-subtext {
+  font-size: 9px;
+  font-weight: 800;
+  color: #64748b;
+  letter-spacing: 0.05em;
+  text-align: center;
+}
+
+/* Right Information Panel Column */
+.gov-gis-popup-info-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.gov-gis-popup-info-section .facility-title {
+  color: #0f172a;
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: -0.01em;
+  margin-bottom: 2px;
+  display: block;
+}
+
+/* Grid row layouts for Label/Value properties */
+.gov-gis-popup-info-section .info-row {
+  font-size: 11px;
+  color: #334155;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.gov-gis-popup-info-section .info-row .label {
+  color: #64748b;
+  font-weight: 600;
+  flex-shrink: 0;
+  width: 50px; /* Aligns data grid consistently */
+}
+
+.gov-gis-popup-info-section .info-row .value {
+  font-weight: 500;
+  color: #1e293b;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Premium Primary Call-To-Action Button */
+.gov-gis-popup-action-btn {
+  margin-top: 6px;
+  width: 100%;
+  background: #1e293b;
+  color: #ffffff;
+  border: none;
+  padding: 6.5px 10px;
+  font-size: 10.5px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Pushes the arrow icon to the right edge */
+  transition: all 0.15s ease;
+}
+
+.gov-gis-popup-action-btn:hover {
+  background: #0f172a;
+}
+
+.custom-map-marker span svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+}

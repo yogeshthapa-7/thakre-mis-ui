@@ -1,0 +1,70 @@
+/* ==========================================
+   Top Header & Notice Ticker
+   ========================================== */
+.topHeaderContainer {
+  background: linear-gradient(90deg, #1e56a0 0%, #16427b 100%);
+  background-image: url('https://www.transparenttextures.com/patterns/pinstripe.png'); /* Subtle pattern overlay if desired */
+  color: #ffffff;
+}
+
+.noticeTickerContainer {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.tickerWrapper {
+  white-space: nowrap;
+  animation: ticker 25s linear infinite;
+  display: inline-block;
+  padding-left: 20px;
+}
+
+.tickerWrapper:hover {
+  animation-play-state: paused;
+}
+
+@keyframes ticker {
+  0% { transform: translate3d(100%, 0, 0); }
+  100% { transform: translate3d(-100%, 0, 0); }
+}
+
+/* ==========================================
+   Navigation Links Custom Look
+   ========================================== */
+.navLink {
+  position: relative;
+  color: #1a1a1a !important;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.navLink:hover {
+  color: #1e56a0 !important;
+}
+
+/* Ant Dropdown Custom Overrides */
+.govDropdown :global(.ant-dropdown-menu) {
+  background: #ffffff !important;
+  border-radius: 6px !important;
+  padding: 6px !important;
+  min-width: 200px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid #e5e7eb !important;
+}
+
+.govDropdown :global(.ant-dropdown-menu-item) {
+  border-radius: 4px !important;
+  padding: 8px 12px !important;
+}
+
+.govDropdown :global(.ant-dropdown-menu-item:hover) {
+  background-color: #f3f4f6 !important;
+}

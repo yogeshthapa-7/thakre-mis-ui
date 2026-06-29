@@ -1,0 +1,73 @@
+{
+  "heading_title": "Thakre GIS Monitoring Matrix",
+  "heading_subtitle": "Real-time geographic distribution and analytical breakdown of municipal resource nodes.",
+  "departments": {
+    "health": "Health Services",
+    "education": "Education & Literacy",
+    "environment": "Environment & Forestry",
+    "agriculture": "Agriculture & Livestock",
+    "infrastructure": "Public Infrastructure",
+    "government_office": "Government Office",
+    "social_service": "Social Service",
+    "finance_and_revenue": "Finance and Revenue"
+  },
+  "sidebar": {
+    "title": "Department",
+    "collapse_tooltip": "Toggle Sidebar",
+    "base_maps": "Base Maps",
+    "osm": "Open Street Map",
+    "satellite": "Satellite"
+  },
+  "map_panel": {
+    "active_ward": "Active Boundary Focus",
+    "all_wards": "Full Municipality View",
+    "reset_view": "Reset Focus",
+    "map_legend": "Spatial Legend",
+    "total_nodes": "Total Monitored Nodes"
+  },
+  "drawer": {
+    "node_profile": "Resource Node Profile",
+    "gis_metadata": "GIS System Metadata",
+    "view_google_maps": "View on Google Maps",
+    "scan_profile": "Scan Web Profile",
+    "building_designation": "Building Designation",
+    "resource_category": "Resource Category",
+    "description_details": "Description Details",
+    "geographic_layout": "Geographic Layout",
+    "services_node": "Services Node",
+    "no_node_selected": "Select a structural map node marker to inspect localized framework dimensions instantly."
+  },
+  "analytics": {
+    "insights_summary": "Analytical Insights Summary",
+    "overview_summary": "Structural Overview Summary",
+    "tracking_metrics": "Currently tracking targeted metrics for"
+  },
+  "notices": {
+    "title": "Live Field Deployments & Campaigns",
+    "ward": "Ward",
+    "lead": "Lead",
+    "status": "Status"
+  },
+    "database": {
+    "titles": {
+      "health": "HEALTH - Public Checkup Routines",
+      "education": "EDUCATION - School Infrastructure Mapping",
+      "environment": "ENVIRONMENT - Forestry & Catchment Protection",
+      "agriculture": "AGRICULTURE - Subsidy & Crop Cycle Track",
+      "infrastructure": "INFRASTRUCTURE - Thakre Road Connectivity & Grid Extension",
+      "government_office": "GOVERNMENT - Municipal Administration & Public Services",
+      "social_service": "SOCIAL SERVICE - Community Development & Women's Empowerment",
+      "finance_and_revenue": "FINANCE & REVENUE - District Fiscal Administration & Tax Services "
+    },
+    "schedules": {
+      "health": "Medical Deployment Rosters (Select a Ward to View Notices)",
+      "education": "Academic Inspection Audits (Select a Ward to View Notices)",
+      "environment": "Afforestation Campaigns (Select a Ward to View Notices)",
+      "agriculture": "Fertilizer & Seed Disbursals (Select a Ward)",
+      "infrastructure": "Civil Engineering Project Timelines (Select a Ward)",
+      "government_office": "Administrative Town Halls & Public Hearing Rosters (Select a Ward to View Notices)",
+      "social_service": "Empowerment Workshops & Community Action Rosters (Select a Group to View Activity)",
+      "finance_and_revenue": "Revenue Planning Calendars, Audit Windows & Public Filing Deadlines"
+    }
+  }
+}
