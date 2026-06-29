@@ -72,32 +72,33 @@ const SiteHeader = () => {
               />
             </Link>
             <div className="flex flex-col" style={{ color: "#ffffff" }}>
-  <span className="text-lg font-bold leading-tight tracking-wide m-0">
-    {navText(APP_META_DATA.heading)}
-  </span>
-  <h1 className="text-lg font-bold leading-tight tracking-wide m-0" style={{ color: "#ffffff" }}>
-    {navText(APP_META_DATA.title)}
-  </h1>
-  <span className="text-md font-medium opacity-100 mt-0.5">
-    {navText(APP_META_DATA.subheading)}
-  </span>
-</div>
+              <span className="text-lg font-bold leading-tight tracking-wide m-0">
+                {navText(APP_META_DATA.heading)}
+              </span>
+              <h1 className="text-lg font-bold leading-tight tracking-wide m-0" style={{ color: "#ffffff" }}>
+                {navText(APP_META_DATA.title)}
+              </h1>
+              <span className="text-md font-medium opacity-100 mt-0.5">
+                {navText(APP_META_DATA.subheading)}
+              </span>
+            </div>
           </div>
+
           {/* Center Block: Scrolling Important Notice Ticker */}
-<div className="col-span-5 flex items-center border-l border-r border-white/20 px-4 h-full">
-  <span className="shrink-0 bg-amber-500 text-slate-900 font-bold text-xs uppercase px-2 py-1 rounded shadow-sm mr-2 z-10">
-    {navText("Notice")}
-  </span>
-  <div className={styles.noticeTickerContainer}>
-    <div className={`${styles.tickerWrapper} text-sm font-medium tracking-wide`} style={{ color: "#ffffff" }}>
-      <span className="mx-4">१. राष्ट्रीय आयोजना बैंक व्यवस्थापन सूचना प्रणाली (NPBMIS) मा आयोजना प्रविष्टिका लागि म्याद थप सम्बन्धी जरुरी सूचना !</span>
-      <span className="mx-4">|</span>
-      <span className="mx-4">२. आर्थिक वर्ष २०८३/८४ का लागि योजना तथा कार्यक्रम प्रस्ताव पेश गर्ने सम्बन्धी सूचना !</span>
-      <span className="mx-4">|</span>
-      <span className="mx-4">३. सामाजिक सुरक्षा भत्ता प्राप्त गर्ने लाभग्राहीहरूको विवरण अद्यावधिक गर्ने सम्बन्धी जरुरी सूचना !</span>
-    </div>
-  </div>
-</div>
+          <div className="col-span-5 flex items-center border-l border-r border-white/20 px-4 h-full">
+            <span className="shrink-0 bg-amber-500 text-slate-900 font-bold text-xs uppercase px-2 py-1 rounded shadow-sm mr-2 z-10">
+              {navText("Notice")}
+            </span>
+            <div className={styles.noticeTickerContainer}>
+              <div className={`${styles.tickerWrapper} text-sm font-medium tracking-wide`} style={{ color: "#ffffff" }}>
+                <span className="mx-4">१. राष्ट्रीय आयोजना बैंक व्यवस्थापन सूचना प्रणाली (NPBMIS) मा आयोजना प्रविष्टिका लागि म्याद थप सम्बन्धी जरुरी सूचना !</span>
+                <span className="mx-4">|</span>
+                <span className="mx-4">२. आर्थिक वर्ष २०८३/८४ का लागि योजना तथा कार्यक्रम प्रस्ताव पेश गर्ने सम्बन्धी सूचना !</span>
+                <span className="mx-4">|</span>
+                <span className="mx-4">३. सामाजिक सुरक्षा भत्ता प्राप्त गर्ने लाभग्राहीहरूको विवरण अद्यावधिक गर्ने सम्बन्धी जरुरी सूचना !</span>
+              </div>
+            </div>
+          </div>
 
           {/* Right Block: Live Date Widget & Flag */}
           <div className="col-span-3 flex items-center justify-end gap-3 text-right">
@@ -124,15 +125,15 @@ const SiteHeader = () => {
             <span className="text-sm font-bold text-slate-800 tracking-tight">Thakre RM</span>
           </div>
 
-          {/* Desktop Navigation Links Left Aligned */}
+          {/* Desktop Navigation Links */}
           <div className="hidden lg:flex items-center gap-6">
-            {NavbarLinkData.map((item) =>
+            {NavbarLinkData.map((item: any) =>
               item.children ? (
                 <Dropdown
                   key={item.labelKey}
                   popupRender={(menu) => <div className={styles.govDropdown}>{menu}</div>}
                   menu={{
-                    items: item.children.map((child) => ({
+                    items: item.children.map((child: any) => ({
                       key: child.url,
                       label: (
                         <Link to={child.url} className="text-slate-700 font-medium text-[14px]">
@@ -148,13 +149,19 @@ const SiteHeader = () => {
                     <DownOutlined className="text-[9px] opacity-70 mt-0.5" />
                   </span>
                 </Dropdown>
-              ) : (
-                <Link
-                  key={item.url}
-                  to={item.url}
+              ) : item.url?.startsWith("http") ? (
+                <a
+                  key={item.labelKey}
+                  href={item.url}
+                  target={item.target || "_blank"}
+                  rel="noopener noreferrer"
                   className={styles.navLink}
                 >
-                  {formatLabel(item.url ? item.labelKey : "")}
+                  {formatLabel(item.labelKey)}
+                </a>
+              ) : (
+                <Link key={item.labelKey} to={item.url || "/"} className={styles.navLink}>
+                  {formatLabel(item.labelKey)}
                 </Link>
               )
             )}
@@ -167,7 +174,6 @@ const SiteHeader = () => {
                 items: [
                   { key: "np", label: "नेपाली" },
                   { key: "en", label: "English" },
-                  
                 ],
                 onClick: ({ key }) => {
                   i18next.changeLanguage(key);
@@ -193,7 +199,6 @@ const SiteHeader = () => {
                 items: [
                   { key: "np", label: "नेपाली" },
                   { key: "en", label: "English" },
-                  
                 ],
                 onClick: ({ key }) => {
                   i18next.changeLanguage(key);
@@ -229,7 +234,7 @@ const SiteHeader = () => {
         }}
       >
         <div className="flex flex-col gap-4">
-          {NavbarLinkData.map((item) =>
+          {NavbarLinkData.map((item: any) =>
             item.children ? (
               <div key={item.labelKey} className="flex flex-col gap-2">
                 <button
@@ -250,7 +255,7 @@ const SiteHeader = () => {
                     mobileDropdownOpen ? "max-h-40 opacity-100 mt-1" : "max-h-0 opacity-0"
                   }`}
                 >
-                  {item.children.map((child) => (
+                  {item.children.map((child: any) => (
                     <Link
                       key={child.url}
                       to={child.url}
@@ -262,10 +267,21 @@ const SiteHeader = () => {
                   ))}
                 </div>
               </div>
+            ) : item.url?.startsWith("http") ? (
+              <a
+                key={item.labelKey}
+                href={item.url}
+                target={item.target || "_blank"}
+                rel="noopener noreferrer"
+                onClick={() => setMobileMenuOpen(false)}
+                className="font-semibold text-slate-800 text-sm hover:text-blue-600 tracking-wide"
+              >
+                {formatLabel(item.labelKey)}
+              </a>
             ) : (
               <Link
-                key={item.url}
-                to={item.url}
+                key={item.labelKey}
+                to={item.url || "/"}
                 onClick={() => setMobileMenuOpen(false)}
                 className="font-semibold text-slate-800 text-sm hover:text-blue-600 tracking-wide"
               >

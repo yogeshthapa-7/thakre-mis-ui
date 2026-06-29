@@ -10,5 +10,5 @@ export const NavbarLinkData = [
   //     { labelKey: "Agriculture_&_Resources", url: "#" },
   //   ],
   // },
-  // { labelKey: "Contact_Us", url: "/site-footer" },
+  { labelKey: "Data_Collection", target: "_blank", url: "https://datacollectionui.soft-acc.com/" },
 ];
