@@ -7,11 +7,9 @@ import { NotificationOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 import { DEPARTMENT_THEMES } from "../../pages/gis-profile";
 import { renderToString } from "react-dom/server";
-import { GisMarkerDrawer } from "./GisMarkerDrawer"; // Restored to local folder reference
+import { GisMarkerDrawer } from "./GisMarkerDrawer";
 
 const HighchartsReact = (_HighchartsReact as any).default || _HighchartsReact;
-
-
 
 interface Notice {
   ward: string;
@@ -32,7 +30,6 @@ interface MarkerData {
 
 interface DepartmentData {
   title: string;
-  // liveMetric: string;
   scheduleTitle: string;
   schedules: { label: string; name: string; time: string; urgent: boolean }[];
   defaultAlertText: string;
@@ -60,10 +57,15 @@ interface DepartmentData {
   };
 }
 
+interface GisMapRendererProps {
+  activeDepartment: string;
+  activeIcon?: React.ReactNode;
+  mapView?: "osm" | "satellite";
+}
+
 const DEPARTMENT_DATABASE: Record<string, DepartmentData> = {
   health: {
     title: "HEALTH - Public Checkup Routines",
-    // liveMetric: "ICU Availability: Stable",
     scheduleTitle: "Medical Deployment Rosters (Select a Ward to View Notices)",
     schedules: [
       { label: "Ward 4", name: "Vaccination Camp Alpha, Thakre Health Post", time: "Tomorrow", urgent: true },
@@ -133,7 +135,6 @@ const DEPARTMENT_DATABASE: Record<string, DepartmentData> = {
   },
   education: {
     title: "EDUCATION - School Infrastructure Mapping",
-    // liveMetric: "Digital Classrooms: 18 Live",
     scheduleTitle: "Academic Inspection Audits (Select a Ward to View Notices)",
     schedules: [
       { label: "Ward 11", name: "Secondary School Resource Review", time: "09:30 AM", urgent: true },
@@ -149,11 +150,11 @@ const DEPARTMENT_DATABASE: Record<string, DepartmentData> = {
       { lat: 27.72046046554605, lng: 85.06482733051035, title: "Shree Mahakali Secondary school", desc: "Enrolled: 512 | Computer Lab: Under Maintenance | Teacher Count: 28", color: "#3b82f6" },
     ],
     notices: [
-  { ward: "Ward 11", campaignName: "Secondary School Resource Review", leadPerson: "Inspector Prakash Adhikari", role: "District Education Officer", details: "Evaluating classroom resources, teaching materials, and student support facilities for secondary level education.", status: "Critical" },
-  { ward: "Ward 7", campaignName: "Library Resource Assessment", leadPerson: "Ms. Sunita Rimal", role: "Academic Resource Auditor", details: "Inspecting book collections, digital archives, and reading space utilization for effective student learning.", status: "Active" },
-  { ward: "Ward 7", campaignName: "Science Lab Safety Review", leadPerson: "Mr. Ramesh Koirala", role: "Laboratory Safety Inspector", details: "Reviewing chemical storage, equipment calibration, and safety protocols in the school science laboratories.", status: "Active" },
-  { ward: "Ward 2", campaignName: "Computer Lab Utilization Study", leadPerson: "Ms. Anjana Shrestha", role: "ICT Education Specialist", details: "Assessing computer hardware, software availability, and student access schedules for digital literacy programs.", status: "Active" },
-],
+      { ward: "Ward 11", campaignName: "Secondary School Resource Review", leadPerson: "Inspector Prakash Adhikari", role: "District Education Officer", details: "Evaluating classroom resources, teaching materials, and student support facilities for secondary level education.", status: "Critical" },
+      { ward: "Ward 7", campaignName: "Library Resource Assessment", leadPerson: "Ms. Sunita Rimal", role: "Academic Resource Auditor", details: "Inspecting book collections, digital archives, and reading space utilization for effective student learning.", status: "Active" },
+      { ward: "Ward 7", campaignName: "Science Lab Safety Review", leadPerson: "Mr. Ramesh Koirala", role: "Laboratory Safety Inspector", details: "Reviewing chemical storage, equipment calibration, and safety protocols in the school science laboratories.", status: "Active" },
+      { ward: "Ward 2", campaignName: "Computer Lab Utilization Study", leadPerson: "Ms. Anjana Shrestha", role: "ICT Education Specialist", details: "Assessing computer hardware, software availability, and student access schedules for digital literacy programs.", status: "Active" },
+    ],
     primaryChart: {
       type: "areaspline",
       title: "Average Student Attendance Rate Performance Trends",
@@ -183,7 +184,6 @@ const DEPARTMENT_DATABASE: Record<string, DepartmentData> = {
   },
   environment: {
     title: "ENVIRONMENT - Forestry & Catchment Protection",
-    // liveMetric: "High-Risk Zones: 3 Monitored",
     scheduleTitle: "Afforestation Campaigns (Select a Ward to View Notices)",
     schedules: [
       { label: "Ward 10", name: "Community Forest Survey", time: "In Progress", urgent: true },
@@ -196,11 +196,11 @@ const DEPARTMENT_DATABASE: Record<string, DepartmentData> = {
       { lat: 27.728519611421746, lng: 85.12082442903542, title: "Thakre Ward No. 8 Office", desc: "Moisture Level: Moderate | Sensor Network Alive | Waste Collection: 92% completed", color: "#22c55e" },
       { lat: 27.750248086365385, lng: 85.0668500235582, title: "Thakre Rural Municipality", desc: "Moisture Level: High | Sensor Network Stable | Air Quality Index: 42 (Good)",  color: "#22c55e" },
     ],
-  notices: [
-  { ward: "Ward 10", campaignName: "Community Forest Survey", leadPerson: "Ranger Binod Khadka", role: "Forestry Engineer", details: "Surveying forest coverage, biodiversity levels, and community usage patterns to strengthen conservation planning.", status: "Critical" },
-  { ward: "Ward 8", campaignName: "Local Road Maintenance", leadPerson: "Ms. Kamala Baral", role: "Infrastructure Supervisor", details: "Overseeing gravel laying, drainage clearance, and minor repairs to improve rural road connectivity.", status: "Active" },
-  { ward: "Ward 11", campaignName: "Community Health Awareness Campaign", leadPerson: "Dr. Sushil Thapa", role: "Public Health Coordinator", details: "Conducting awareness sessions on sanitation, nutrition, and preventive healthcare for local residents.", status: "Active" }
-],
+    notices: [
+      { ward: "Ward 10", campaignName: "Community Forest Survey", leadPerson: "Ranger Binod Khadka", role: "Forestry Engineer", details: "Surveying forest coverage, biodiversity levels, and community usage patterns to strengthen conservation planning.", status: "Critical" },
+      { ward: "Ward 8", campaignName: "Local Road Maintenance", leadPerson: "Ms. Kamala Baral", role: "Infrastructure Supervisor", details: "Overseeing gravel laying, drainage clearance, and minor repairs to improve rural road connectivity.", status: "Active" },
+      { ward: "Ward 11", campaignName: "Community Health Awareness Campaign", leadPerson: "Dr. Sushil Thapa", role: "Public Health Coordinator", details: "Conducting awareness sessions on sanitation, nutrition, and preventive healthcare for local residents.", status: "Active" }
+    ],
     primaryChart: {
       type: "areaspline",
       title: "Forest Canopy Density Index Growth Monitor",
@@ -230,14 +230,13 @@ const DEPARTMENT_DATABASE: Record<string, DepartmentData> = {
   },
   agriculture: {
     title: "AGRICULTURE - Subsidy & Crop Cycle Track",
-    // liveMetric: "Seed Stock: 12 Tons Remaining",
     scheduleTitle: "Fertilizer & Seed Disbursals (Select a Ward)",
     schedules: [
-  { label: "Ward 7", name: "Organic Fertilizer Allocation", time: "02:00 PM", urgent: false },
-  { label: "Ward 8", name: "Irrigation Canal Inspection", time: "Oct 24", urgent: true },
-  { label: "Ward 2", name: "Crop Rotation Planning", time: "Oct 24", urgent: true },
-  { label: "Ward 11", name: "Seed Quality Verification", time: "Oct 24", urgent: true }
-],
+      { label: "Ward 7", name: "Organic Fertilizer Allocation", time: "02:00 PM", urgent: false },
+      { label: "Ward 8", name: "Irrigation Canal Inspection", time: "Oct 24", urgent: true },
+      { label: "Ward 2", name: "Crop Rotation Planning", time: "Oct 24", urgent: true },
+      { label: "Ward 11", name: "Seed Quality Verification", time: "Oct 24", urgent: true }
+    ],
     defaultAlertText: "Select an active agricultural deployment from the grid to pull soil testing records, grain distribution catalogs, and technician logs.",
     markers: [
       { lat: 27.74067868526365, lng: 85.10038733584588, title: "Odale Krishi Farm", desc: "Stockpiled: 45 Metric Tons | Distribution Ready | Irrigation: Automated", color: "#eab308" },
@@ -292,30 +291,26 @@ const DEPARTMENT_DATABASE: Record<string, DepartmentData> = {
   },
   infrastructure: {
     title: "INFRASTRUCTURE - Thakre Road Connectivity & Grid Extension",
-    // liveMetric: "Active Projects: 6 Works",
     scheduleTitle: "Civil Engineering Project Timelines (Select a Ward)",
-schedules: [
-  { label: "Ward 7", name: "Naukila Pul Structural Check", time: "09:00 AM", urgent: true },
-  { label: "Ward 8", name: "Mahesh River Bridge Load Test", time: "Oct 22", urgent: false },
-  { label: "Ward 11", name: "Mahesh Khola Suspension Bridge Inspection", time: "Oct 25", urgent: false },
-  { label: "Ward 9", name: "Manakamana Roda Dhunga Udhyog Power Audit", time: "Oct 25", urgent: false }
-],
-
-defaultAlertText: "Select an active public work site node to monitor asphalt laying velocity, concrete structural blueprints, rural electrification grants, and municipal engineer logs.",
-
-markers: [
-  { lat: 27.74599784433173, lng: 85.10167478323257, title: "Mahesh Khola Suspension Bridge Inspection", desc: "Inspection Phase: 100% | Structural Integrity Verified | Safety Clearance: Approved", color: "#f97316" },
-  { lat: 27.748162736658763, lng: 85.08734105809208, title: "Mahesh River Bridge Load Test", desc: "Load Test: Completed | Feeder Active | Capacity Verified at 85%", color: "#f97316" },
-  { lat: 27.747706973457404, lng: 85.08186935161866, title: "Naukila Pul Structural Check", desc: "Structural Review: Ongoing | Reinforcement Stable | Lighting System Operational", color: "#f97316" },
-  { lat: 27.75136082387367, lng: 85.08186935161866, title: "Manakamana Roda Dhunga Udhyog Power Audit", desc: "Power Audit: Completed | Feeder Active | Industrial Output: 62 Tons/day", color: "#f97316" }
-],
-
-notices: [
-  { ward: "Ward 7", campaignName: "Naukila Pul Structural Check", leadPerson: "Er. Ramesh Thapa", role: "Structural Engineer", details: "Conducting reinforcement inspections, deck alignment checks, and safety compliance reviews for Naukila Pul.", status: "Active" },
-  { ward: "Ward 8", campaignName: "Mahesh River Bridge Load Test", leadPerson: "Mr. Suresh Shrestha", role: "Bridge Load Inspector", details: "Performing load capacity tests, monitoring stress distribution, and verifying feeder synchronization.", status: "Critical" },
-  { ward: "Ward 11", campaignName: "Mahesh Khola Suspension Bridge Inspection", leadPerson: "Er. Sunita Maharjan", role: "Structural Project Engineer", details: "Inspecting suspension cables, abutments, and flood resilience measures for Mahesh Khola Bridge.", status: "Scheduled" },
-  { ward: "Ward 9", campaignName: "Manakamana Roda Dhunga Udhyog Power Audit", leadPerson: "Dr. Binod Khadka", role: "Industrial Energy Auditor", details: "Auditing transformer synchronization, feeder activity, and industrial energy output of the stone industry.", status: "Scheduled" }
-],
+    schedules: [
+      { label: "Ward 7", name: "Naukila Pul Structural Check", time: "09:00 AM", urgent: true },
+      { label: "Ward 8", name: "Mahesh River Bridge Load Test", time: "Oct 22", urgent: false },
+      { label: "Ward 11", name: "Mahesh Khola Suspension Bridge Inspection", time: "Oct 25", urgent: false },
+      { label: "Ward 9", name: "Manakamana Roda Dhunga Udhyog Power Audit", time: "Oct 25", urgent: false }
+    ],
+    defaultAlertText: "Select an active public work site node to monitor asphalt laying velocity, concrete structural blueprints, rural electrification grants, and municipal engineer logs.",
+    markers: [
+      { lat: 27.74599784433173, lng: 85.10167478323257, title: "Mahesh Khola Suspension Bridge Inspection", desc: "Inspection Phase: 100% | Structural Integrity Verified | Safety Clearance: Approved", color: "#f97316" },
+      { lat: 27.748162736658763, lng: 85.08734105809208, title: "Mahesh River Bridge Load Test", desc: "Load Test: Completed | Feeder Active | Capacity Verified at 85%", color: "#f97316" },
+      { lat: 27.747706973457404, lng: 85.08186935161866, title: "Naukila Pul Structural Check", desc: "Structural Review: Ongoing | Reinforcement Stable | Lighting System Operational", color: "#f97316" },
+      { lat: 27.75136082387367, lng: 85.08186935161866, title: "Manakamana Roda Dhunga Udhyog Power Audit", desc: "Power Audit: Completed | Feeder Active | Industrial Output: 62 Tons/day", color: "#f97316" }
+    ],
+    notices: [
+      { ward: "Ward 7", campaignName: "Naukila Pul Structural Check", leadPerson: "Er. Ramesh Thapa", role: "Structural Engineer", details: "Conducting reinforcement inspections, deck alignment checks, and safety compliance reviews for Naukila Pul.", status: "Active" },
+      { ward: "Ward 8", campaignName: "Mahesh River Bridge Load Test", leadPerson: "Mr. Suresh Shrestha", role: "Bridge Load Inspector", details: "Performing load capacity tests, monitoring stress distribution, and verifying feeder synchronization.", status: "Critical" },
+      { ward: "Ward 11", campaignName: "Mahesh Khola Suspension Bridge Inspection", leadPerson: "Er. Sunita Maharjan", role: "Structural Project Engineer", details: "Inspecting suspension cables, abutments, and flood resilience measures for Mahesh Khola Bridge.", status: "Scheduled" },
+      { ward: "Ward 9", campaignName: "Manakamana Roda Dhunga Udhyog Power Audit", leadPerson: "Dr. Binod Khadka", role: "Industrial Energy Auditor", details: "Auditing transformer synchronization, feeder activity, and industrial energy output of the stone industry.", status: "Scheduled" }
+    ],
     primaryChart: {
       type: "column",
       title: "Road Network Extension Progress (Kilometers Paved)",
@@ -466,7 +461,7 @@ notices: [
     markers: [
       { lat: 27.75456, lng: 85.06633, title: "Mahadevbesi Aama Samuha", desc: "Members: 42 Active | Micro-credit Savings: Up to Date | Lead Projects: Cooperative Tailoring Center", color: "#ec4899" },
       { lat: 27.75010, lng: 85.06870, title: "Tasarpu Aama Samuha", desc: "Members: 38 Active | Health Log: 12 Checkups Completed | Lead Projects: Community Kitchen & Literacy", color: "#ec4899" },
-      { lat: 27.75266, lng: 85.06428, title: "Bhumesthan Mahila Samuha", desc: "Members: 51 Active | Small Scale Funding: 4 Approved | Lead Projects: Entrepreneurship Bootcamp", color: "#ec4899" },
+      { lat: 27.7266, lng: 85.06428, title: "Bhumesthan Mahila Samuha", desc: "Members: 51 Active | Small Scale Funding: 4 Approved | Lead Projects: Entrepreneurship Bootcamp", color: "#ec4899" },
       { lat: 27.75870, lng: 85.09450, title: "Kebalpur Mahila Samuha", desc: "Members: 47 Active | Agriculture Registry: 29 Listed | Lead Projects: Seed Banking & Distribution", color: "#ec4899" }
     ],
     notices: [
@@ -534,14 +529,14 @@ notices: [
       { label: "DCC Dhading", name: "Local Revenue Sharing Summit", time: "Oct 29", urgent: true }
     ],
     defaultAlertText: "Select an active district financial node or tracking timeline from the Action Center grid to pull real-time treasury logs, revenue settlement metrics, and tax collection summaries.",
-  markers: [
-  { lat: 27.75331, lng: 85.06442, title: "Municipal Revenue Section", desc: "Property Tax Collection: Open | Business Registration: Available | Revenue Counter: Active | Staff: 6 Present", color: "#1e3a8a" },
-  { lat: 27.75692, lng: 85.05884, title: "Mahadevbesi Revenue Collection Center", desc: "House Tax Payments: 27 Today | Service Charges Collection: Ongoing | Citizen Queue: Moderate", color: "#1e3a8a" },
-  { lat: 27.74855, lng: 85.07163, title: "Business Tax & Licensing Desk", desc: "New Business Licenses: 8 Issued | Renewal Requests: 15 Pending | Digital Payment: Available", color: "#1e3a8a" },
-  { lat: 27.76148, lng: 85.05126, title: "Municipal Financial Service Center", desc: "Revenue Collection Status: Normal | Citizen Services: Active | Daily Transactions: 61", color: "#1e3a8a" },
-  { lat: 27.74481, lng: 85.07952, title: "Land & Property Tax Help Desk", desc: "Property Record Verification | Tax Assessment Support | Citizen Assistance Counter", color: "#1e3a8a" },
-  { lat: 27.75894, lng: 85.08731, title: "Revenue Facilitation Center", desc: "Municipal Fee Collection | Building Permit Fees | Online Payment Assistance", color: "#1e3a8a" }
-],
+    markers: [
+      { lat: 27.75331, lng: 85.06442, title: "Municipal Revenue Section", desc: "Property Tax Collection: Open | Business Registration: Available | Revenue Counter: Active | Staff: 6 Present", color: "#1e3a8a" },
+      { lat: 27.75692, lng: 85.05884, title: "Mahadevbesi Revenue Collection Center", desc: "House Tax Payments: 27 Today | Service Charges Collection: Ongoing | Citizen Queue: Moderate", color: "#1e3a8a" },
+      { lat: 27.74855, lng: 85.07163, title: "Business Tax & Licensing Desk", desc: "New Business Licenses: 8 Issued | Renewal Requests: 15 Pending | Digital Payment: Available", color: "#1e3a8a" },
+      { lat: 27.76148, lng: 85.05126, title: "Municipal Financial Service Center", desc: "Revenue Collection Status: Normal | Citizen Services: Active | Daily Transactions: 61", color: "#1e3a8a" },
+      { lat: 27.74481, lng: 85.07952, title: "Land & Property Tax Help Desk", desc: "Property Record Verification | Tax Assessment Support | Citizen Assistance Counter", color: "#1e3a8a" },
+      { lat: 27.78894, lng: 85.08731, title: "Revenue Facilitation Center", desc: "Municipal Fee Collection | Building Permit Fees | Online Payment Assistance", color: "#1e3a8a" }
+    ],
     notices: [
       { ward: "LRO Dhading", campaignName: "Land Registry Digital Migration", leadPerson: "Ramesh Kumar Adhikari", role: "Chief Land Revenue Officer", details: "Upgrading physical land logs into the central NeLRiS digital portal at Land Revenue Office. Expect short service windows for land transfers.", status: "Critical" },
       { ward: "LRO Dhading", campaignName: "Missed Land Tax Amnesty Window", leadPerson: "Gita Poudel", role: "Section Officer", details: "Public hearing providing waiver allowances on historic compound interest penalties for long-overdue property taxes.", status: "Active" },
@@ -587,7 +582,7 @@ notices: [
           { name: "Property Land Registrations & Ownership Transfers", y: 15, color: "#1e3a8a" }
         ]
       },
-      description: "This structural breakdown chart maps aggregate government business activity headings. Property conveyance operations combined with standard commercial tax tracking account for three quarters of district administrative volumes."
+      description: "This structural breakdown chart maps aggregate government business activity headers. Property conveyance operations combined with standard commercial tax tracking account for three quarters of district administrative volumes."
     }
   }
 };
@@ -595,12 +590,8 @@ notices: [
 export const GisMapRenderer = ({ 
   activeDepartment,
   activeIcon,
-  mapView = "osm"
-}: { 
-  activeDepartment: string;
-  activeIcon?: React.ReactNode;
-  mapView?: "osm" | "satellite";
-}) => {
+  mapView = "osm",
+}: GisMapRendererProps) => {
   const { t } = useTranslation("map");
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
@@ -610,8 +601,6 @@ export const GisMapRenderer = ({
   const tt = (key: string, fallback: string) => t(key, { defaultValue: fallback });
 
   const [selectedWard, setSelectedWard] = useState<string | null>(null);
-  
-  // Drawer states passed cleanly down to custom helper component
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const [selectedMarker, setSelectedMarker] = useState<MarkerData | null>(null);
 
@@ -648,7 +637,6 @@ export const GisMapRenderer = ({
     return data.notices.filter((n) => n.ward.toLowerCase() === selectedWard.toLowerCase());
   }, [selectedWard, data]);
 
-  // Swap base map layer
   useEffect(() => {
     if (!mapRef.current) return;
 
@@ -670,7 +658,6 @@ export const GisMapRenderer = ({
     tileLayerRef.current = newLayer;
   }, [mapView]);
 
-  // Build Leaflet Canvas
   useEffect(() => {
     if (!mapContainerRef.current || mapRef.current) return;
 
@@ -686,7 +673,6 @@ export const GisMapRenderer = ({
     layerGroupRef.current = L.layerGroup().addTo(map);
     mapRef.current = map;
 
-    // Interaction native layout event hooks
     map.on("popupopen", (e) => {
       const popupNode = e.popup.getElement();
       if (!popupNode) return;
@@ -745,7 +731,6 @@ export const GisMapRenderer = ({
     };
   }, []);
 
-  // Marker Pin Updates
   useEffect(() => {
     const layerGroup = layerGroupRef.current;
     if (!layerGroup || !mapRef.current) return;
@@ -759,41 +744,41 @@ export const GisMapRenderer = ({
         const pinIcon = L.divIcon({
           className: "custom-map-marker",
           html: `
-            <div class="flex items-center justify-center w-4 h-4 rounded-full border-2 border-white shadow-lg" 
+            <div class="flex items-center justify-center w-5 h-5 rounded-full border-2 border-white shadow-lg" 
                  style="background-color: ${activeMarkerColor};">
-              <span class="text-white text-sm">${iconHtml}</span>
+              <span class="text-white text-base">${iconHtml}</span>
             </div>`,
-          iconSize: [16, 16],
-          iconAnchor: [8, 8]
+          iconSize: [20, 20],
+          iconAnchor: [10, 10]
         });
         
         const mapMarker = L.marker([markerInfo.lat, markerInfo.lng], { icon: pinIcon });
-        const googleMapsUrl =`https://www.google.com/maps?q=${markerInfo.lat},${markerInfo.lng}`;
+        const googleMapsUrl = `https://www.google.com/maps?q=${markerInfo.lat},${markerInfo.lng}`;
         
         const popupContent = `
-  <div class="gov-gis-popup-container flex flex-col gap-3 w-[320px] p-3 font-sans">
+  <div class="gov-gis-popup-container flex flex-col gap-3 w-[340px] p-3.5 font-sans">
     <div class="flex gap-4 items-start">
       <div class="gov-gis-popup-qr-section flex flex-col items-center gap-1.5 shrink-0">
-        <div class="qr-wrapper w-[70px] h-[70px] border border-slate-200 p-1 bg-white rounded-md">
+        <div class="qr-wrapper w-[80px] h-[80px] border border-slate-200 p-1 bg-white rounded-md">
           <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(googleMapsUrl)}" alt="${tt("drawer.scan_profile", "Scan Web Profile")}" class="w-full h-full object-contain" />
         </div>
-        <span class="qr-subtext text-[9px] font-bold text-slate-500 tracking-wider">${tt("drawer.scan_profile", "Scan Web Profile")}</span>
+        <span class="qr-subtext text-[11px] font-bold text-slate-500 tracking-wider">${tt("drawer.scan_profile", "Scan Web Profile")}</span>
       </div>
       
       <div class="gov-gis-popup-info-section flex-1 min-w-0 flex flex-col gap-1.5">
-        <span class="facility-title text-sm font-bold text-slate-900 block truncate">${markerInfo.title}</span>
+        <span class="facility-title text-base font-bold text-slate-900 block truncate">${markerInfo.title}</span>
         
-        <div class="info-row text-xs text-slate-600 flex gap-2">
+        <div class="info-row text-sm text-slate-600 flex gap-2">
           <span class="label font-medium text-slate-400 w-16 shrink-0">${tt("popup.status", "Status")}</span>
           <span class="value text-emerald-600 font-bold truncate">: ${tt("popup.operational", "Operational")}</span>
         </div>
         
-        <div class="info-row text-xs text-slate-600 flex gap-2">
+        <div class="info-row text-sm text-slate-600 flex gap-2">
           <span class="label font-medium text-slate-400 w-16 shrink-0">${tt("popup.details", "Details")}</span>
           <span class="value text-slate-700 font-medium break-words leading-tight">: ${markerInfo.desc}</span>
         </div>
         
-        <div class="info-row text-xs text-slate-600 flex gap-2">
+        <div class="info-row text-sm text-slate-600 flex gap-2">
           <span class="label font-medium text-slate-400 w-16 shrink-0">${tt("popup.location", "Location")}</span>
           <span class="value text-slate-700 font-medium truncate">: ${markerInfo.lat.toFixed(4)}°, ${markerInfo.lng.toFixed(4)}°</span>
         </div>
@@ -802,12 +787,12 @@ export const GisMapRenderer = ({
     
     <div class="flex items-center gap-2 border-t border-slate-100 pt-3 mt-1 w-full">
       <a href="${googleMapsUrl}" target="_blank" rel="noopener noreferrer" 
-         class="flex-1 bg-slate-900 hover:bg-slate-800 text-white text-[10px] font-bold py-2 rounded flex items-center justify-center transition-colors no-underline">
+         class="flex-1 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold py-2 rounded flex items-center justify-center transition-colors no-underline">
          ${tt("popup.view_map", "View Map ↗")}
       </a>
 
       <button 
-         class="view-details-btn flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold py-2 rounded transition-colors"
+         class="view-details-btn flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold py-2 rounded transition-colors"
          data-title="${markerInfo.title}"
          data-desc="${markerInfo.desc}"
          data-lat="${markerInfo.lat}"
@@ -817,34 +802,32 @@ export const GisMapRenderer = ({
          ${tt("popup.view_details", "View Details")}
       </button>
 
-      <button onclick="window.print()" class="flex-1 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 text-[10px] font-bold py-2 rounded transition-colors">
+      <button onclick="window.print()" class="flex-1 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 text-xs font-bold py-2 rounded transition-colors">
          ${tt("popup.print_details", "Print Details")}
       </button>
     </div>
   </div>`;
 
-        mapMarker.addTo(layerGroup).bindPopup(popupContent, { closeButton: false, offset: [0, -10], minWidth: 320 });
+        mapMarker.addTo(layerGroup).bindPopup(popupContent, { closeButton: false, offset: [0, -10], minWidth: 340 });
       });
     }
   }, [data, activeDepartment, activeIcon]);
 
-  // Primary Chart Options
   const primaryChartOptions = useMemo(() => {
     const hasWardData = selectedWard && data.primaryChart.wardData && data.primaryChart.wardData[selectedWard];
     const baseData = hasWardData ? data.primaryChart.wardData![selectedWard] : data.primaryChart.data;
     const chartData = baseData.map((val, idx) => ({ y: val, color: selectedWard && data.primaryChart.categories[idx].toLowerCase() === selectedWard.toLowerCase() ? "#ffffff" : data.primaryChart.color }));
     return {
       chart: { type: data.primaryChart.type, backgroundColor: "transparent", height: 240, spacingBottom: 5, style: { fontFamily: "sans-serif" } },
-      title: { text: selectedWard ? `${data.primaryChart.title} — Active: ${selectedWard}` : data.primaryChart.title, align: "left", style: { color: "#cbd5e1", fontSize: "13px", fontWeight: "600" } },
-      xAxis: { categories: data.primaryChart.categories, labels: { style: { color: "#64748b", fontSize: "10px" } }, lineColor: "#334155", tickWidth: 0 },
-      yAxis: { title: { text: data.primaryChart.yAxisLabel, style: { color: "#64748b", fontSize: "10px" } }, labels: { style: { color: "#475569", fontSize: "10px" } }, gridLineColor: "#1e293b", gridLineDashStyle: "Dash" as any },
-      legend: { enabled: false }, credits: { enabled: false }, tooltip: { backgroundColor: "#1e293b", borderWidth: 1, borderColor: "#334155", style: { color: "#f8fafc", fontSize: "12px" }, shared: true },
+      title: { text: selectedWard ? `${data.primaryChart.title} — Active: ${selectedWard}` : data.primaryChart.title, align: "left", style: { color: "#cbd5e1", fontSize: "14px", fontWeight: "600" } },
+      xAxis: { categories: data.primaryChart.categories, labels: { style: { color: "#64748b", fontSize: "11px" } }, lineColor: "#334155", tickWidth: 0 },
+      yAxis: { title: { text: data.primaryChart.yAxisLabel, style: { color: "#64748b", fontSize: "11px" } }, labels: { style: { color: "#475569", fontSize: "11px" } }, gridLineColor: "#1e293b", gridLineDashStyle: "Dash" as any },
+      legend: { enabled: false }, credits: { enabled: false }, tooltip: { backgroundColor: "#1e293b", borderWidth: 1, borderColor: "#334155", style: { color: "#f8fafc", fontSize: "13px" }, shared: true },
       plotOptions: { column: { borderRadius: 4, borderWidth: 0, pointWidth: 20 }, areaspline: { color: data.primaryChart.color, fillColor: { linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 }, stops: [[0, data.primaryChart.color], [1, data.primaryChart.gradientTo]] }, lineWidth: 3, marker: { radius: 4 } } },
       series: [{ name: data.primaryChart.seriesName, data: chartData }]
     };
   }, [data, selectedWard]);
 
-  // Secondary Chart Options
   const secondaryChartOptions = useMemo(() => {
     const hasWardData = selectedWard && data.secondaryChart.wardData && data.secondaryChart.wardData[selectedWard];
     const baseData = hasWardData ? data.secondaryChart.wardData![selectedWard] : data.secondaryChart.data;
@@ -857,11 +840,11 @@ export const GisMapRenderer = ({
     }
     return {
       chart: { type: data.secondaryChart.type, backgroundColor: "transparent", height: 240, spacingBottom: 5, style: { fontFamily: "sans-serif" } },
-      title: { text: selectedWard ? `${data.secondaryChart.title} (${selectedWard} Distribution)` : data.secondaryChart.title, align: "left", style: { color: "#cbd5e1", fontSize: "13px", fontWeight: "600" } },
-      xAxis: data.secondaryChart.type !== "pie" ? { categories: ["Ward 1", "Ward 2", "Ward 3", "Ward 4", "Ward 5", "Ward 6", "Ward 7", "Ward 8", "Ward 9", "Ward 10", "Ward 11"], labels: { style: { color: "#64748b", fontSize: "10px" } }, lineColor: "#334155" } : undefined,
+      title: { text: selectedWard ? `${data.secondaryChart.title} (${selectedWard} Distribution)` : data.secondaryChart.title, align: "left", style: { color: "#cbd5e1", fontSize: "14px", fontWeight: "600" } },
+      xAxis: data.secondaryChart.type !== "pie" ? { categories: ["Ward 1", "Ward 2", "Ward 3", "Ward 4", "Ward 5", "Ward 6", "Ward 7", "Ward 8", "Ward 9", "Ward 10", "Ward 11"], labels: { style: { color: "#64748b", fontSize: "11px" } }, lineColor: "#334155" } : undefined,
       yAxis: { title: { text: null }, labels: { enabled: data.secondaryChart.type !== "pie" }, gridLineColor: "#1e293b" },
-      legend: data.secondaryChart.type === "pie" ? { itemStyle: { color: "#94a3b8", fontSize: "11px" }, align: "right" as any, layout: "vertical" as any, verticalAlign: "middle" as any } : { enabled: false },
-      credits: { enabled: false }, tooltip: { backgroundColor: "#1e293b", borderWidth: 1, borderColor: "#334155", style: { color: "#f8fafc", fontSize: "12px" } },
+      legend: data.secondaryChart.type === "pie" ? { itemStyle: { color: "#94a3b8", fontSize: "12px" }, align: "right" as any, layout: "vertical" as any, verticalAlign: "middle" as any } : { enabled: false },
+      credits: { enabled: false }, tooltip: { backgroundColor: "#1e293b", borderWidth: 1, borderColor: "#334155", style: { color: "#f8fafc", fontSize: "13px" } },
       plotOptions: { pie: { allowPointSelect: true, cursor: "pointer", dataLabels: { enabled: false }, showInLegend: true, borderWidth: 0 }, spline: { color: "#38bdf8", lineWidth: 3, marker: { radius: 4 } }, bar: { borderRadius: 3, borderWidth: 0, color: "#10b981", pointWidth: 14 } },
       series: [{ name: data.secondaryChart.seriesName, data: chartData }]
     };
@@ -870,33 +853,29 @@ export const GisMapRenderer = ({
   return (
     <div className="flex flex-col gap-6 w-full h-full pb-6 relative overflow-x-hidden">
       
-      {/* ROW 1: FULL-WIDTH MAP LAYER */}
       <div className="w-full flex flex-col gap-2 select-none">
         <div className="px-1">
-          {/* RESTORED: Interactive GIS Map Header */}
-          <span className="text-[11px] font-bold tracking-wider text-slate-400 uppercase">{t("headers.interactive_gis_map", "Interactive GIS Map")}</span>
+          <span className="text-xs font-bold tracking-wider text-slate-400 uppercase">{t("headers.interactive_gis_map", "Interactive GIS Map")}</span>
         </div>
         <div className="w-full h-[450px] bg-[#111625] rounded-xl border border-slate-800/80 overflow-hidden relative shadow-inner">
           <div ref={mapContainerRef} className="w-full h-full z-10" />
         </div>
       </div>
 
-      {/* ROW 2: ACTION CENTER GRID */}
       <div className="w-full flex flex-col gap-2 select-none">
         <div className="px-1">
-          <span className="text-[11px] font-bold tracking-wider text-slate-400 uppercase">{t("headers.operational_activity", "Operational Activity Streams")}</span>
+          <span className="text-xs font-bold tracking-wider text-slate-400 uppercase">{t("headers.operational_activity", "Operational Activity Streams")}</span>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div className="bg-[#1a2232] rounded-xl border border-slate-800/70 p-5 flex flex-col gap-4 shadow-lg">
             <div className="flex items-center justify-between border-b border-slate-800/50 pb-2.5">
               <div className="flex items-center gap-2">
-                {activeIcon && <span className="text-blue-400 text-sm flex items-center justify-center filter drop-shadow-[0_0_4px_rgba(59,130,246,0.5)]">{activeIcon}</span>}
-                <span className="text-xs font-bold text-slate-200 tracking-wide uppercase">{t(`database.titles.${activeDepartment}`, data.title)}</span>
+                {activeIcon && <span className="text-blue-400 text-base flex items-center justify-center filter drop-shadow-[0_0_4px_rgba(59,130,246,0.5)]">{activeIcon}</span>}
+                <span className="text-sm font-bold text-slate-200 tracking-wide uppercase">{t(`database.titles.${activeDepartment}`, data.title)}</span>
               </div>
-              {/* <span className="text-[10px] text-blue-400 font-semibold tracking-tight">{data.liveMetric}</span> */}
             </div>
             <div className="flex flex-col gap-2">
-              <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">{t(`database.schedules.${activeDepartment}`, data.scheduleTitle)}</div>
+              <div className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">{t(`database.schedules.${activeDepartment}`, data.scheduleTitle)}</div>
               {data.schedules.map((sched, idx) => {
                 const isSelected = selectedWard === sched.label;
                 return (
@@ -908,91 +887,85 @@ export const GisMapRenderer = ({
                     }`}
                   >
                     <div className="flex items-center gap-4">
-                      <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded border ${isSelected ? "bg-blue-600 text-white border-blue-400" : "bg-[#121824] text-slate-400 border-slate-800/60"}`}>{sched.label}</span>
-                      <span className="text-xs font-medium tracking-wide">{sched.name}</span>
+                      <span className={`text-sm font-mono font-bold px-2 py-0.5 rounded border ${isSelected ? "bg-blue-600 text-white border-blue-400" : "bg-[#121824] text-slate-400 border-slate-800/60"}`}>{sched.label}</span>
+                      <span className="text-sm font-medium tracking-wide">{sched.name}</span>
                     </div>
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${sched.urgent ? 'text-red-400 bg-red-500/10 border border-red-500/20' : 'text-slate-400 bg-slate-800'}`}>{sched.time}</span>
+                    <span className={`text-xs font-bold px-2 py-0.5 rounded ${sched.urgent ? 'text-red-400 bg-red-500/10 border border-red-500/20' : 'text-slate-400 bg-slate-800'}`}>{sched.time}</span>
                   </button>
                 );
               })}
             </div>
           </div>
 
-        {/* RIGHT CARD: PUBLIC NOTICES DESK */}
-<div className="bg-[#1a2232] rounded-xl border border-slate-800/70 p-5 flex flex-col shadow-lg justify-start min-h-[290px]">
-  <div className="flex items-center justify-between border-b border-slate-800/50 pb-2.5 mb-3">
-    <div className="flex items-center gap-2">
-      <span className="text-orange-500 text-sm flex items-center justify-center filter drop-shadow-[0_0_4px_rgba(234,88,12,0.5)]"><NotificationOutlined /></span>
-      <span className="text-xs font-bold text-slate-200 tracking-wide uppercase">{t("headers.public_notices", "Public Notices Desk")}</span>
-    </div>
-    <span className="text-[10px] text-slate-500 font-mono">{selectedWard ? `${selectedWard} ${t("status.active", "Active")}` : t("status.awaiting_selection", "Awaiting Selection")}</span>
-  </div>
-
-  {/* FIXED: Replaced max-h-[220px] with flex-1 min-h-0 so notices dynamically occupy the full card size */}
-  <div className="flex-1 flex flex-col gap-3 overflow-y-auto min-h-0 pr-1">
-    {filteredNotices.length > 0 ? (
-      filteredNotices.map((notice, idx) => {
-        {/* Find the active schedule row matching this ward to pull its live time metric (e.g., 'Tomorrow', 'Oct 19') */}
-        const matchingSchedule = data?.schedules?.find(s => s.label === notice.ward);
-        const parentDate = matchingSchedule ? matchingSchedule.time : "Scheduled";
-
-        {/* Generate professional timeline execution timestamps based on task status context */}
-        let displayTimeline = `${parentDate} • 10:00 AM`; // Default morning registry session
-        if (notice.status === 'Critical') {
-          displayTimeline = `${parentDate} • Immediate (09:00 AM)`;
-        } else if (notice.status === 'Active') {
-          displayTimeline = `Ongoing Today • Until 05:00 PM`;
-        } else if (idx % 2 === 1) {
-          displayTimeline = `${parentDate} • 01:30 PM`; // Afternoon split sessions
-        }
-
-        return (
-          <div key={idx} className="bg-[#222c3f] border border-slate-800/60 rounded-lg p-3.5 flex flex-col gap-2">
-            <div className="flex items-start justify-between gap-4">
-              <div className="flex flex-col gap-1">
-                <span className="text-xs font-bold text-blue-400 tracking-wide">{notice.campaignName}</span>
-                {/* NEW METADATA: Unified tracking string utilizing the date from the left activity stream */}
-                <div className="flex items-center gap-1.5 text-[10px] text-slate-400 font-mono">
-                  <span className="text-blue-400/80">📅</span>
-                  <span>Timeline: {displayTimeline}</span>
-                </div>
+          <div className="bg-[#1a2232] rounded-xl border border-slate-800/70 p-5 flex flex-col shadow-lg justify-start min-h-[290px]">
+            <div className="flex items-center justify-between border-b border-slate-800/50 pb-2.5 mb-3">
+              <div className="flex items-center gap-2">
+                <span className="text-orange-500 text-base flex items-center justify-center filter drop-shadow-[0_0_4px_rgba(234,88,12,0.5)]"><NotificationOutlined /></span>
+                <span className="text-sm font-bold text-slate-200 tracking-wide uppercase">{t("headers.public_notices", "Public Notices Desk")}</span>
               </div>
-              
-              <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded tracking-wide uppercase shrink-0 ${
-                notice.status === 'Critical' 
-                  ? 'text-red-400 bg-red-500/10 border border-red-500/20' 
-                  : notice.status === 'Active' 
-                    ? 'text-green-400 bg-green-500/10 border border-green-500/20' 
-                    : 'text-blue-400 bg-blue-500/10 border border-blue-500/20'
-              }`}>
-                {notice.status}
-              </span>
+              <span className="text-xs text-slate-500 font-mono">{selectedWard ? `${selectedWard} ${t("status.active", "Active")}` : t("status.awaiting_selection", "Awaiting Selection")}</span>
             </div>
-            
-            <p className="text-xs text-slate-300 m-0 leading-relaxed">{notice.details}</p>
-            
-            <div className="flex items-center justify-between border-t border-slate-800/60 pt-2 mt-0.5">
-              <span className="text-[11px] text-slate-200 font-medium">{t("labels.lead", "Lead")}: <span className="text-slate-100 font-semibold">{notice.leadPerson}</span></span>
-              <span className="text-[10px] text-slate-500 italic font-medium">{notice.role}</span>
+
+            <div className="flex-1 flex flex-col gap-3 overflow-y-auto min-h-0 pr-1">
+              {filteredNotices.length > 0 ? (
+                filteredNotices.map((notice, idx) => {
+                  const matchingSchedule = data?.schedules?.find(s => s.label === notice.ward);
+                  const parentDate = matchingSchedule ? matchingSchedule.time : "Scheduled";
+
+                  let displayTimeline = `${parentDate} • 10:00 AM`;
+                  if (notice.status === 'Critical') {
+                    displayTimeline = `${parentDate} • Immediate (09:00 AM)`;
+                  } else if (notice.status === 'Active') {
+                    displayTimeline = `Ongoing Today • Until 05:00 PM`;
+                  } else if (idx % 2 === 1) {
+                    displayTimeline = `${parentDate} • 01:30 PM`;
+                  }
+
+                  return (
+                    <div key={idx} className="bg-[#222c3f] border border-slate-800/60 rounded-lg p-3.5 flex flex-col gap-2">
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex flex-col gap-1">
+                          <span className="text-sm font-bold text-blue-400 tracking-wide">{notice.campaignName}</span>
+                          <div className="flex items-center gap-1.5 text-xs text-slate-400 font-mono">
+                            <span className="text-blue-400/80">📅</span>
+                            <span>Timeline: {displayTimeline}</span>
+                          </div>
+                        </div>
+                        
+                        <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded tracking-wide uppercase shrink-0 ${
+                          notice.status === 'Critical' 
+                            ? 'text-red-400 bg-red-500/10 border border-red-500/20' 
+                            : notice.status === 'Active' 
+                              ? 'text-green-400 bg-green-500/10 border border-green-500/20' 
+                              : 'text-blue-400 bg-blue-500/10 border border-blue-500/20'
+                        }`}>
+                          {notice.status}
+                        </span>
+                      </div>
+                      
+                      <p className="text-sm text-slate-300 m-0 leading-relaxed">{notice.details}</p>
+                      
+                      <div className="flex items-center justify-between border-t border-slate-800/60 pt-2 mt-0.5">
+                        <span className="text-sm text-slate-200 font-medium">{t("labels.lead", "Lead")}: <span className="text-slate-100 font-semibold">{notice.leadPerson}</span></span>
+                        <span className="text-xs text-slate-500 italic font-medium">{notice.role}</span>
+                      </div>
+                    </div>
+                  );
+                })
+              ) : (
+                <div className="flex-1 flex flex-col items-center justify-center text-center p-6 border border-dashed border-slate-800/60 rounded-lg bg-[#151d2a]/30">
+                  <span className="text-xl Richmond text-slate-600 mb-1">📋</span>
+                  <p className="text-sm text-slate-400 m-0 max-w-[80%] leading-relaxed">{selectedWard ? t("messages.no_notices", { ward: selectedWard, defaultValue: "No explicit notices or official workflows registered for {{ward}} within this division." }) : data.defaultAlertText}</p>
+                </div>
+              )}
             </div>
           </div>
-        );
-      })
-    ) : (
-      <div className="flex-1 flex flex-col items-center justify-center text-center p-6 border border-dashed border-slate-800/60 rounded-lg bg-[#151d2a]/30">
-        <span className="text-lg text-slate-600 mb-1">📋</span>
-        <p className="text-xs text-slate-400 m-0 max-w-[80%] leading-relaxed">{selectedWard ? t("messages.no_notices", { ward: selectedWard, defaultValue: "No explicit notices or official workflows registered for {{ward}} within this division." }) : data.defaultAlertText}</p>
-      </div>
-    )}
-  </div>
-</div>
         </div>
       </div>
 
-      {/* ROW 3: HIGHCHARTS ANALYTICS VIEW */}
       <div className="w-full flex flex-col gap-2">
         <div className="px-1">
-          <span className="text-[11px] font-bold tracking-wider text-slate-400 uppercase">{t("headers.statistical_metrics", "Statistical Metrics Breakdown")}</span>
+          <span className="text-xs font-bold tracking-wider text-slate-400 uppercase">{t("headers.statistical_metrics", "Statistical Metrics Breakdown")}</span>
         </div>
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
           <div className="bg-[#1a2232] rounded-xl border border-slate-800/70 p-5 shadow-lg flex flex-col justify-between gap-4">
@@ -1000,8 +973,8 @@ export const GisMapRenderer = ({
               <HighchartsReact highcharts={Highcharts} options={primaryChartOptions} immutable={true} />
             </div>
             <div className="bg-[#151d2a] border border-slate-800/40 rounded-lg p-3.5">
-              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">{t("headers.analytical_insights", "Analytical Insights Summary")}</div>
-              <p className="text-xs text-slate-400 m-0 leading-relaxed">{selectedWard ? t("messages.tracking_metrics", { ward: selectedWard, defaultValue: "Currently tracking targeted metrics for {{ward}}." }) : data.primaryChart.description}</p>
+              <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">{t("headers.analytical_insights", "Analytical Insights Summary")}</div>
+              <p className="text-sm text-slate-400 m-0 leading-relaxed">{selectedWard ? t("messages.tracking_metrics", { ward: selectedWard, defaultValue: "Currently tracking targeted metrics for {{ward}}." }) : data.primaryChart.description}</p>
             </div>
           </div>
           <div className="bg-[#1a2232] rounded-xl border border-slate-800/70 p-5 shadow-lg flex flex-col justify-between gap-4">
@@ -1009,14 +982,13 @@ export const GisMapRenderer = ({
               <HighchartsReact highcharts={Highcharts} options={secondaryChartOptions} immutable={true} />
             </div>
             <div className="bg-[#151d2a] border border-slate-800/40 rounded-lg p-3.5">
-              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">{t("headers.structural_overview", "Structural Overview Summary")}</div>
-              <p className="text-xs text-slate-400 m-0 leading-relaxed">{data.secondaryChart.description}</p>
+              <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">{t("headers.structural_overview", "Structural Overview Summary")}</div>
+              <p className="text-sm text-slate-400 m-0 leading-relaxed">{data.secondaryChart.description}</p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* DYNAMIC COMPONENT SIDE-DRAWER */}
       <GisMarkerDrawer 
         isOpen={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}

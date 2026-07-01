@@ -10,7 +10,7 @@ import { APP_META_DATA } from "../../../config";
 
 const { Header } = Layout;
 
-const SiteHeader = () => {
+export const SiteHeader = () => {
   const { t, i18n } = useTranslation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false);
@@ -42,15 +42,20 @@ const SiteHeader = () => {
   const language = i18n.language?.startsWith("np") ? "np" : "en";
   const navText = (key: string) => t(key);
 
-  // Helper to format text just in case translation fallback shows raw snake_case keys
+  // Helper to format text just in case translation fallback shows raw keys
   const formatLabel = (key: string) => {
     const translated = navText(key);
-    return translated === key ? key.replace(/_/g, " ") : translated;
+    if (translated === key) {
+      // Strips 'tools.' prefix and replaces underscores for cleaner fallbacks
+      const cleanKey = key.includes(".") ? key.split(".")[1] : key;
+      return cleanKey.replace(/_/g, " ");
+    }
+    return translated;
   };
 
   return (
     <Header style={{ width: "100%", height: "auto", padding: 0, background: "#fff", lineHeight: "normal" }}>
-      {/* 1. TOP BANNER (FORCED DEEP BLUE VIA INLINE STYLE) */}
+      {/* 1. TOP BANNER */}
       <div 
         className="hidden lg:block"
         style={{
@@ -119,7 +124,7 @@ const SiteHeader = () => {
       <div className="border-b border-gray-200 bg-white">
         <div className="max-w-[1440px] mx-auto px-6 h-14 flex items-center justify-between">
           
-          {/* Mobile Brand Title (Hidden on Desktop) */}
+          {/* Mobile Brand Title */}
           <div className="lg:hidden flex items-center gap-2">
             <img src="/nav_logo.png" alt="Emblem" className="h-9 w-auto" />
             <span className="text-sm font-bold text-slate-800 tracking-tight">Thakre RM</span>
@@ -144,7 +149,7 @@ const SiteHeader = () => {
                   }}
                   trigger={["hover"]}
                 >
-                  <span className={`${styles.navLink} cursor-pointer`}>
+                  <span className={`${styles.navLink} cursor-pointer flex items-center gap-1`}>
                     {formatLabel(item.labelKey)}
                     <DownOutlined className="text-[9px] opacity-70 mt-0.5" />
                   </span>
@@ -240,7 +245,7 @@ const SiteHeader = () => {
                 <button
                   type="button"
                   onClick={() => setMobileDropdownOpen((prev) => !prev)}
-                  className="flex items-center justify-between text-left font-semibold text-slate-800 text-sm tracking-wide"
+                  className="flex items-center justify-between text-left font-semibold text-slate-800 text-sm tracking-wide w-full"
                 >
                   <span>{formatLabel(item.labelKey)}</span>
                   <DownOutlined
@@ -252,7 +257,7 @@ const SiteHeader = () => {
 
                 <div
                   className={`flex flex-col gap-2 overflow-hidden pl-3 border-l border-gray-200 transition-all duration-300 ${
-                    mobileDropdownOpen ? "max-h-40 opacity-100 mt-1" : "max-h-0 opacity-0"
+                    mobileDropdownOpen ? "max-h-60 opacity-100 mt-1" : "max-h-0 opacity-0"
                   }`}
                 >
                   {item.children.map((child: any) => (

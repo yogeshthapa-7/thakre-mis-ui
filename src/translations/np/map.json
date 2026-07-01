@@ -18,6 +18,13 @@
     "osm": "ओपन स्ट्रिट म्याप (OSM)",
     "satellite": "स्याटेलाइट (Satellite)"
   },
+   "tools": {
+      "citizen_service_requests":"नागरिक सेवा अनुरोध",
+      "development_project_tracker":"विकास परियोजना अनुगमन",
+      "financial_transparency":"आर्थिक पारदर्शिता",
+      "emergency_alerts":"आपत्कालीन सूचना",
+      "citizen_feedback_polls":"नागरिक प्रतिक्रिया सर्वेक्षण"
+    },
   "map_panel": {
     "active_ward": "सक्रिय वडा सिमाना",
     "all_wards": "पूर्ण गाउँपालिका दृश्य",

@@ -1,14 +1,12 @@
 export const NavbarLinkData = [
   { labelKey: "Home", url: "/" },
   { labelKey: "Interactive_GIS_Map", url: "/gis-profile" }, // Moved to top-level link
-  // { 
-  //   labelKey: "Thakre_Digital_Profile", 
-  //   children: [
-  //     { labelKey: "Demographic_Metrics", url: "#" },
-  //     { labelKey: "Socio-Economic_Profile", url: "#" },
-  //     { labelKey: "Infrastructure_&_Utilities", url: "#" },
-  //     { labelKey: "Agriculture_&_Resources", url: "#" },
-  //   ],
-  // },
+  { 
+    labelKey: "citizens_services", 
+    children: [
+      { labelKey: "tools.citizen_service_requests", url: "/citizens_services/citizens-service-requests" },
+      { labelKey: "tools.development_project_tracker", url: "/citizens_services/development-project-tracker" },
+    ],
+  },
   { labelKey: "Data_Collection", target: "_blank", url: "https://datacollectionui.soft-acc.com/" },
 ];

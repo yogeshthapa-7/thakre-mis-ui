@@ -18,6 +18,13 @@
     "osm": "Open Street Map",
     "satellite": "Satellite"
   },
+   "tools": {
+      "citizen_service_requests":"Citizen Service Requests",
+      "development_project_tracker":"Development Project Tracker",
+      "financial_transparency":"Financial Transparency",
+      "emergency_alerts":"Emergency Alerts",
+      "citizen_feedback_polls":"Citizen Feedback Polls"
+    },
   "map_panel": {
     "active_ward": "Active Boundary Focus",
     "all_wards": "Full Municipality View",
