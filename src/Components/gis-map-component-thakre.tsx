@@ -34,43 +34,13 @@ export const GisMap = ({
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
   const layerGroupRef = useRef<L.LayerGroup | null>(null);
-  const tileLayerRef = useRef<L.TileLayer | null>(null);
+  
+  // Track layers separately in a dictionary instead of an isolated reference variable
+  const baseLayersRef = useRef<{ osm: L.TileLayer; satellite: L.TileLayer } | null>(null);
 
   const tt = (key: string, fallback: string) => t(key, { defaultValue: fallback });
 
-// Handle Base Map Layer Updates Switch (OSM vs Satellite)
-  useEffect(() => {
-    if (!mapRef.current) return;
-
-    // 1. Forcefully scrub and clear the previous tile layer instance from the map canvas
-    if (tileLayerRef.current) {
-      mapRef.current.removeLayer(tileLayerRef.current);
-      tileLayerRef.current = null;
-    }
-
-    // 2. Use a highly reliable, high-resolution satellite endpoint (Google/Esri open proxy cluster)
-    const tileUrl =
-      mapView === "satellite"
-        ? "https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
-        : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png";
-
-    const attribution =
-      mapView === "satellite"
-        ? "&copy; Google Maps Imagery"
-        : "&copy; OpenStreetMap contributors &copy; CARTO";
-
-    // 3. Construct and mount the new layer onto the active map reference
-    const newLayer = L.tileLayer(tileUrl, {
-      attribution,
-      maxZoom: mapView === "satellite" ? 20 : 20,
-      subdomains: mapView === "satellite" ? [] : ["a", "b", "c", "d"]
-    });
-
-    newLayer.addTo(mapRef.current);
-    tileLayerRef.current = newLayer;
-  }, [mapView]);
-
-  // Map Initialization & GeoJSON Thakre Boundary Fetch
+  // Map Initialization & Core Set-up
   useEffect(() => {
     if (!mapContainerRef.current || mapRef.current) return;
 
@@ -79,12 +49,24 @@ export const GisMap = ({
       attributionControl: false,
     }).setView([27.712, 85.025], 12);
 
-    const initialLayer = L.tileLayer(
-      "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-    ).addTo(map);
-    tileLayerRef.current = initialLayer;
-    L.control.zoom({ position: "topright" }).addTo(map);
+    // Build the structural base layer definitions instantly on setup
+    const osmLayer = L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+      attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
+      maxZoom: 20
+    });
 
+    const satelliteLayer = L.tileLayer("https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}", {
+      attribution: "&copy; Google Maps Imagery",
+      maxZoom: 20
+    });
+
+    // Save definitions directly onto the instance mapping dictionary
+    baseLayersRef.current = { osm: osmLayer, satellite: satelliteLayer };
+
+    // Set the fallback layer straight into action at boot
+    osmLayer.addTo(map);
+
+    L.control.zoom({ position: "topright" }).addTo(map);
     layerGroupRef.current = L.layerGroup().addTo(map);
     mapRef.current = map;
 
@@ -147,7 +129,23 @@ export const GisMap = ({
     };
   }, [onViewDetails]);
 
-// Render Pins/Markers Group Layers
+  // Handle Base Map Layer Updates Switch (OSM vs Satellite)
+  useEffect(() => {
+    const map = mapRef.current;
+    const baseLayers = baseLayersRef.current;
+    if (!map || !baseLayers) return;
+
+    // Swap active canvas states via definitive switches
+    if (mapView === "satellite") {
+      map.removeLayer(baseLayers.osm);
+      map.addLayer(baseLayers.satellite);
+    } else {
+      map.removeLayer(baseLayers.satellite);
+      map.addLayer(baseLayers.osm);
+    }
+  }, [mapView]);
+
+  // Render Pins/Markers Group Layers
   useEffect(() => {
     const layerGroup = layerGroupRef.current;
     if (!layerGroup || !mapRef.current) return;
@@ -157,8 +155,6 @@ export const GisMap = ({
 
     if (markers && markers.length > 0) {
       markers.forEach((markerInfo) => {
-        
-        // DYNAMIC FIX: Fallback to the array's defined color first, then department theme
         const markerColor = markerInfo.color || DEPARTMENT_THEMES[activeDepartment] || "#ffffff";
 
         const pinIcon = L.divIcon({
@@ -252,18 +248,17 @@ export const GisMap = ({
     }
   }, [markers, activeDepartment, activeIcon, t]);
 
-return (
+  return (
     <div
       className="w-full bg-[#111625] rounded-xl border border-slate-800/80 overflow-hidden relative shadow-inner"
       style={{ height }}
     >
-      {/* Target and correct Leaflet wrapper constraints explicitly */}
       <style>{`
         .leaflet-popup-content-wrapper {
           padding: 0 !important;
           border-radius: 12px !important;
           overflow: hidden !important;
-          width: 440px !important; /* Forces uniform canvas size similar to your reference */
+          width: 440px !important;
           max-width: 90vw !important;
         }
 
@@ -274,14 +269,12 @@ return (
           box-sizing: border-box !important;
         }
 
-        /* Container specific constraints */
         .gov-gis-popup-container {
           width: 100% !important;
           display: flex !important;
           flex-direction: column !important;
         }
 
-        /* Ensures fields behave fluidly inside the flexible layout space */
         .gov-gis-popup-info-section .value {
           display: block !important;
           white-space: normal !important;

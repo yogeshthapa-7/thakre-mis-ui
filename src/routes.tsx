@@ -4,7 +4,7 @@ import ErrorPage from "./pages/error-pages/error-page";
 import { LandingPage } from "./pages/landing-page";
 import  GisProfilePage  from "./pages/gis-profile";
 import CitizensServiceRequests from "./pages/citizens_services/citizens-service-requests";
-import { DevelopmentProjectTracker } from "./pages/citizens_services/development-project-tracker";
+import DevelopmentProjectTracker  from "./pages/citizens_services/development-project-tracker";
 const routes: RouteObject[] = [
   {
     path: "/",
