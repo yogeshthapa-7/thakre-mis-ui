@@ -19,6 +19,7 @@ import _HighchartsReact from "highcharts-react-official";
 
 // Path mapping reference
 import { GisMap } from '../../Components/gis-map-component-thakre';
+import { GisMarkerDrawer } from '../../Components/gis/GisMarkerDrawer';
 
 const HighchartsReact = (_HighchartsReact as any).default || _HighchartsReact;
 const { Option } = Select;
@@ -61,6 +62,9 @@ interface MapMarkerData {
 }
 
 const CitizensServiceRequests: React.FC = () => {
+  const [drawerVisible, setDrawerVisible] = useState<boolean>(false);
+  const [selectedMarker, setSelectedMarker] = useState<MapMarkerData | null>(null);
+  
   const [selectedUpdate, setSelectedUpdate] = useState<UpdateItem | null>({
     id: 1, 
     title: 'Water Supply Mainline Leak', 
@@ -226,7 +230,9 @@ const mapMarkers: MapMarkerData[] = useMemo(() => {
     credits: { enabled: false }
   }), []);
 
-const handleMapIncidentSelect = (marker: any) => {
+const handleMapIncidentSelect = (marker: MapMarkerData) => {
+    setSelectedMarker(marker);
+
     // Looks for a match via ID first, falls back to matching by title if needed
     const matchedUpdate = recentUpdates.find(
       u => u.id === marker.id || u.title === marker.title
@@ -234,6 +240,8 @@ const handleMapIncidentSelect = (marker: any) => {
     if (matchedUpdate) {
       setSelectedUpdate(matchedUpdate);
     }
+
+    setDrawerVisible(true);
   };
 
   return (
@@ -595,6 +603,12 @@ const handleMapIncidentSelect = (marker: any) => {
           </div>
 
         </main>
+        <GisMarkerDrawer
+          isOpen={drawerVisible}
+          onClose={() => setDrawerVisible(false)}
+          marker={selectedMarker}
+          activeDepartment="infrastructure"
+        />
       </ConfigProvider>
     </div>
   );

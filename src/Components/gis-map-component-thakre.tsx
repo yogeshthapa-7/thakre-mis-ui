@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { DEPARTMENT_THEMES } from "../pages/gis-profile";
 
 interface MarkerData {
+  id: number;
   lat: number;
   lng: number;
   title: string;
@@ -78,13 +79,14 @@ export const GisMap = ({
       const viewDetailsBtn = popupNode.querySelector(".view-details-btn");
       if (viewDetailsBtn && onViewDetails) {
         viewDetailsBtn.addEventListener("click", () => {
+          const id = parseInt(viewDetailsBtn.getAttribute("data-id") || "0", 10);
           const title = viewDetailsBtn.getAttribute("data-title") || "";
           const desc = viewDetailsBtn.getAttribute("data-desc") || "";
           const lat = parseFloat(viewDetailsBtn.getAttribute("data-lat") || "0");
           const lng = parseFloat(viewDetailsBtn.getAttribute("data-lng") || "0");
           const color = viewDetailsBtn.getAttribute("data-color") || "";
 
-          onViewDetails({ title, desc, lat, lng, color });
+          onViewDetails({ id, title, desc, lat, lng, color });
           map.closePopup();
         });
       }
@@ -226,6 +228,7 @@ export const GisMap = ({
 
               <button 
                  class="view-details-btn flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold py-2 rounded transition-colors"
+                 data-id="${markerInfo.id}"
                  data-title="${markerInfo.title}"
                  data-desc="${markerInfo.desc}"
                  data-lat="${markerInfo.lat}"

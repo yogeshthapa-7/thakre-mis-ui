@@ -18,6 +18,7 @@ import _HighchartsReact from "highcharts-react-official";
 
 // Path mapping reference
 import { GisMap } from '../../Components/gis-map-component-thakre';
+import { GisMarkerDrawer } from '../../Components/gis/GisMarkerDrawer';
 
 const HighchartsReact = (_HighchartsReact as any).default || _HighchartsReact;
 
@@ -25,7 +26,7 @@ interface ProjectItem {
   id: number;
   name: string;
   ward: string;
-  // status: 'In Progress' | 'Delayed' | 'Completed';
+  status: 'In Progress' | 'Delayed' | 'Completed';
   progress: number;
   budget: string;
   spent: string;
@@ -52,12 +53,14 @@ interface MapMarkerData {
 }
 
 const DevelopmentProjectTracker: React.FC = () => {
+  const [drawerVisible, setDrawerVisible] = useState<boolean>(false);
+  const [selectedMarker, setSelectedMarker] = useState<MapMarkerData | null>(null);
   const developmentProjects: ProjectItem[] = useMemo(() => [
     { 
       id: 1, 
       name: 'Ward 4 Health Post Infrastructure Construction', 
       ward: 'Ward 4', 
-      // status: 'Delayed', 
+      status: 'Delayed',
       progress: 45, 
       budget: '15,200,220',
       spent: '6,840,100',
@@ -69,7 +72,7 @@ const DevelopmentProjectTracker: React.FC = () => {
       id: 2, 
       name: 'Trishuli Corridor Link Road Upgrading & Reinforced Drainage', 
       ward: 'Ward 2', 
-      // status: 'In Progress', 
+      status: 'In Progress',
       progress: 75, 
       budget: '69,000,000',
       spent: '51,750,000',
@@ -81,7 +84,7 @@ const DevelopmentProjectTracker: React.FC = () => {
       id: 3, 
       name: 'Central Thakre Integrated Drinking Water Supply Pipeline', 
       ward: 'Ward 5', 
-      // status: 'In Progress', 
+      status: 'In Progress',
       progress: 60, 
       budget: '19,500,000',
       spent: '11,700,000',
@@ -93,7 +96,7 @@ const DevelopmentProjectTracker: React.FC = () => {
       id: 4, 
       name: 'Municipal Multipurpose Community Center & Assembly Hall', 
       ward: 'Ward 3', 
-      // status: 'Delayed', 
+      status: 'Delayed',
       progress: 20, 
       budget: '11,150,000',
       spent: '2,230,000',
@@ -132,12 +135,14 @@ const DevelopmentProjectTracker: React.FC = () => {
   ], []);
 
   const handleMapProjectSelect = (marker: any) => {
+    setSelectedMarker(marker);
     const matchedProject = developmentProjects.find(
       p => p.id === marker.id || p.name === marker.title
     );
     if (matchedProject) {
       setSelectedProject(matchedProject);
     }
+    setDrawerVisible(true);
   };
 
   // HIGHCHARTS SPECIFICATIONS WITH LOGICAL DATA TRANSLATIONS
@@ -154,7 +159,7 @@ const DevelopmentProjectTracker: React.FC = () => {
 
   const budgetPieOptions = useMemo(() => ({
     chart: { backgroundColor: 'transparent', type: 'pie', height: 240 },
-    title: { text: 'Capital Pool', align: 'center', verticalAlign: 'middle', style: { color: '#ffffff', fontSize: '13px', fontWeight: 'bold' } },
+    title: { text: 'Capital Pool', align: 'right', verticalAlign: 'top', style: { color: '#ffffff', fontSize: '13px', fontWeight: 'bold' } },
     legend: { enabled: true, itemStyle: { color: '#94a3b8', fontSize: '11px' }, layout: 'vertical', align: 'right', verticalAlign: 'middle' },
     plotOptions: { pie: { innerSize: '75%', borderWidth: 0, dataLabels: { enabled: false }, showInLegend: true } },
     series: [{
@@ -200,6 +205,24 @@ const DevelopmentProjectTracker: React.FC = () => {
       key: 'ward',
       width: '140px',
       render: (text: string) => <span className="text-slate-400 font-semibold text-xs">{text}</span>,
+    },
+    {
+      title: 'CURRENT STATUS',
+      dataIndex: 'status',
+      key: 'status',
+      width: '160px',
+      render: (status: string) => {
+        const statusClass = status === 'Delayed'
+          ? 'bg-red-500/10 text-red-400 border-red-500/20'
+          : status === 'Completed'
+            ? 'bg-green-500/10 text-green-400 border-green-500/20'
+            : 'bg-blue-500/10 text-blue-400 border-blue-500/20';
+        return (
+          <span className={`inline-flex items-center rounded-full border px-3 py-1 text-[11px] font-semibold ${statusClass}`}>
+            {status}
+          </span>
+        );
+      },
     },
     {
       title: 'WORK PROGRESS VELOCITY',
@@ -442,6 +465,12 @@ const DevelopmentProjectTracker: React.FC = () => {
           </div>
 
         </main>
+        <GisMarkerDrawer
+        isOpen={drawerVisible}
+        onClose={() => setDrawerVisible(false)}
+        marker={selectedMarker}
+        activeDepartment="infrastructure"
+        />
       </ConfigProvider>
 
       {/* Complete CSS Overrides Injector */}
