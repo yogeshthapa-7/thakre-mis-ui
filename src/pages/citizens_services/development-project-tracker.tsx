@@ -15,6 +15,7 @@ import {
 import SiteHeader from "../../islands/navigation/site-header";
 import Highcharts from "highcharts";
 import _HighchartsReact from "highcharts-react-official";
+import { useTranslation } from "react-i18next";
 
 // Path mapping reference
 import { GisMap } from '../../Components/gis-map-component-thakre';
@@ -53,6 +54,7 @@ interface MapMarkerData {
 }
 
 const DevelopmentProjectTracker: React.FC = () => {
+  const { t } = useTranslation();
   const [drawerVisible, setDrawerVisible] = useState<boolean>(false);
   const [selectedMarker, setSelectedMarker] = useState<MapMarkerData | null>(null);
   const developmentProjects: ProjectItem[] = useMemo(() => [
@@ -121,18 +123,18 @@ const DevelopmentProjectTracker: React.FC = () => {
       const project = developmentProjects.find(p => p.id === point.id);
       return {
         ...point,
-        title: project?.name || "Development Project",
-        desc: `${project?.ward} — Budget: NPR ${project?.budget} | Progress: ${project?.progress}%`
+        title: project?.name || t('citizens_service.dev_tracker.default_project_title'),
+        desc: `${project?.ward} — ${t('citizens_service.dev_tracker.budget_label')}: NPR ${project?.budget} | ${t('citizens_service.dev_tracker.progress_label')}: ${project?.progress}%`
       };
     });
   }, [developmentProjects]);
 
-  const metricCards: MetricCardItem[] = useMemo(() => [
-    { title: 'Total Registered Projects', val: '28', desc: 'Active capital works projects tracked', icon: <ContainerOutlined className="text-blue-400 text-lg" />, color: 'text-white' },
-    { title: 'In Active Progress', val: '14', desc: 'Sectors currently undergoing active construction', icon: <DashboardOutlined className="text-amber-400 text-lg" />, color: 'text-amber-400' },
-    { title: 'Budget Allocation Spent', val: '65.2%', desc: 'Total expended capital versus treasury balance', icon: <DollarCircleOutlined className="text-green-400 text-lg" />, color: 'text-green-400' },
-    { title: 'Critical Interventions', val: '4', desc: 'Projects flagging significant timeline delays', icon: <WarningFilled className="text-red-400 text-lg" />, color: 'text-red-400' }
-  ], []);
+const metricCards: MetricCardItem[] = useMemo(() => [
+    { title: t('citizens_service.metrics.total_requests'), val: '28', desc: t('citizens_service.dev_tracker.metrics.active_projects_desc'), icon: <ContainerOutlined className="text-blue-400 text-lg" />, color: 'text-white' },
+    { title: t('citizens_service.metrics.in_progress'), val: '14', desc: t('citizens_service.dev_tracker.metrics.active_sectors_desc'), icon: <DashboardOutlined className="text-amber-400 text-lg" />, color: 'text-amber-400' },
+    { title: t('citizens_service.charts.monthly_inflow_title'), val: '65.2%', desc: t('citizens_service.dev_tracker.metrics.expenditure_ratio_desc'), icon: <DollarCircleOutlined className="text-green-400 text-lg" />, color: 'text-green-400' },
+    { title: t('citizens_service.metrics.pending'), val: '4', desc: t('citizens_service.dev_tracker.metrics.delayed_projects_desc'), icon: <WarningFilled className="text-red-400 text-lg" />, color: 'text-red-400' }
+  ], [t]);
 
   const handleMapProjectSelect = (marker: any) => {
     setSelectedMarker(marker);
@@ -157,9 +159,16 @@ const DevelopmentProjectTracker: React.FC = () => {
     credits: { enabled: false }
   }), []);
 
-  const budgetPieOptions = useMemo(() => ({
+const budgetPieOptions = useMemo(() => ({
     chart: { backgroundColor: 'transparent', type: 'pie', height: 240 },
-    title: { text: 'Capital Pool', align: 'right', verticalAlign: 'top', style: { color: '#ffffff', fontSize: '13px', fontWeight: 'bold' } },
+    title: { 
+      text: t('citizens_service.charts.category_allocation_title'), 
+      align: 'center', 
+      verticalAlign: 'middle', 
+      x: -80, // Pulls the text left to align precisely over the pie circle
+      y: 15, 
+      style: { color: '#ffffff', fontSize: '13px', fontWeight: 'bold' } 
+    },
     legend: { enabled: true, itemStyle: { color: '#94a3b8', fontSize: '11px' }, layout: 'vertical', align: 'right', verticalAlign: 'middle' },
     plotOptions: { pie: { innerSize: '75%', borderWidth: 0, dataLabels: { enabled: false }, showInLegend: true } },
     series: [{
@@ -192,40 +201,53 @@ const DevelopmentProjectTracker: React.FC = () => {
     credits: { enabled: false }
   }), []);
 
+  const getStatusBadgeClasses = (status: string) => {
+    if (status === 'Delayed') {
+      return 'bg-red-500/10 text-red-400 border-red-500/20';
+    }
+    if (status === 'Completed') {
+      return 'bg-green-500/10 text-green-400 border-green-500/20';
+    }
+    return 'bg-blue-500/10 text-blue-400 border-blue-500/20';
+  };
+
+  const getStatusKey = (status: string) => {
+    if (status === 'Delayed') return 'delayed';
+    if (status === 'Completed') return 'completed';
+    return 'in_progress';
+  };
+
   const columns = [
     {
-      title: 'DEVELOPMENT PROJECT TITLE',
+      title: t('citizens_service.details.panel_title').toUpperCase(),
       dataIndex: 'name',
       key: 'name',
       render: (text: string) => <span className="font-bold text-white text-xs tracking-wide">{text}</span>,
     },
     {
-      title: 'MUNICIPAL LOCATION',
+      title: t('citizens_service.form.location').toUpperCase(),
       dataIndex: 'ward',
       key: 'ward',
       width: '140px',
       render: (text: string) => <span className="text-slate-400 font-semibold text-xs">{text}</span>,
     },
     {
-      title: 'CURRENT STATUS',
+      title: t('citizens_service.metrics.in_progress').toUpperCase(),
       dataIndex: 'status',
       key: 'status',
       width: '160px',
-      render: (status: string) => {
-        const statusClass = status === 'Delayed'
-          ? 'bg-red-500/10 text-red-400 border-red-500/20'
-          : status === 'Completed'
-            ? 'bg-green-500/10 text-green-400 border-green-500/20'
-            : 'bg-blue-500/10 text-blue-400 border-blue-500/20';
-        return (
-          <span className={`inline-flex items-center rounded-full border px-3 py-1 text-[11px] font-semibold ${statusClass}`}>
-            {status}
-          </span>
-        );
-      },
+        render: (status: string) => {
+          const statusClass = getStatusBadgeClasses(status);
+          const statusKey = getStatusKey(status);
+          return (
+            <span className={`inline-flex items-center rounded-full border px-3 py-1 text-[11px] font-semibold ${statusClass}`}>
+              {t(`citizens_service.status.${statusKey}`)}
+            </span>
+          );
+        },
     },
     {
-      title: 'WORK PROGRESS VELOCITY',
+      title: t('citizens_service.charts.monthly_inflow_title').toUpperCase(),
       dataIndex: 'progress',
       key: 'progress',
       width: '240px',
@@ -239,7 +261,7 @@ const DevelopmentProjectTracker: React.FC = () => {
       ),
     },
     {
-      title: 'TOTAL BUDGET (NPR)',
+      title: t('citizens_service.status.allocated_budget').toUpperCase(),
       dataIndex: 'budget',
       key: 'budget',
       width: '180px',
@@ -256,7 +278,7 @@ const DevelopmentProjectTracker: React.FC = () => {
           <div className="flex items-center gap-3">
             <span className="text-blue-500 opacity-90 text-lg"><BankOutlined /></span>
             <div>
-              <p className="text-base font-bold text-slate-100 m-0">Thakre Municipality Development Project Tracker</p>
+              <p className="text-base font-bold text-slate-100 m-0">{t('citizens_service.title1')}</p>
             </div>
           </div>
         </div>
@@ -286,12 +308,12 @@ const DevelopmentProjectTracker: React.FC = () => {
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-2 border-b border-slate-800/60 mb-3">
                 <div>
                   <h3 className="text-sm font-bold text-white tracking-wide flex items-center gap-2 m-0">
-                    <EnvironmentOutlined className="text-orange-500 animate-pulse text-lg" /> GIS Project Localization Live Data Layer
+                    <EnvironmentOutlined className="text-orange-500 animate-pulse text-lg" /> {t('citizens_service.map.title')}
                   </h3>
                 </div>
                 <div className="flex items-center gap-2 bg-[#070b12] p-1 rounded-lg border border-slate-800">
-                  <button onClick={() => setMapViewMode("osm")} className={`text-[11px] font-bold px-3 py-1.5 rounded transition-colors ${mapViewMode === 'osm' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-slate-200'}`}>OSM View</button>
-                  <button onClick={() => setMapViewMode("satellite")} className={`text-[11px] font-bold px-3 py-1.5 rounded transition-colors ${mapViewMode === 'satellite' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-slate-200'}`}>Satellite View</button>
+                  <button onClick={() => setMapViewMode("osm")} className={`text-[11px] font-bold px-3 py-1.5 rounded transition-colors ${mapViewMode === 'osm' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-slate-200'}`}>{t('citizens_service.map.osm_view')}</button>
+                  <button onClick={() => setMapViewMode("satellite")} className={`text-[11px] font-bold px-3 py-1.5 rounded transition-colors ${mapViewMode === 'satellite' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-slate-200'}`}>{t('citizens_service.map.satellite_view')}</button>
                 </div>
               </div>
 
@@ -312,29 +334,69 @@ const DevelopmentProjectTracker: React.FC = () => {
           {/* ROW 2: PROFESSIONAL STRUCTURAL PROJECTS DATA REGISTRY REGION TABLE */}
           <div className="bg-[#101726] border border-slate-800/80 rounded-xl p-3 shadow-xl">
             <div className="flex justify-between items-center border-b border-slate-800/60 pb-2 mb-3">
-<h4 className="text-sm font-bold uppercase tracking-wider text-slate-300 m-0 flex items-center gap-2">
-                    <ContainerOutlined className="text-green-500 text-base" /> Public Works Structural Capital Project Registry Matrix
-                  </h4>
-                  <span className="text-xs bg-slate-800 text-slate-400 px-2.5 py-0.5 rounded-full font-mono font-bold">Verified Central Audit Ledger</span>
+                    <h4 className="text-sm font-bold uppercase tracking-wider text-slate-300 m-0 flex items-center gap-2">
+                      <ContainerOutlined className="text-green-500 text-base" /> {t('citizens_service.dev_tracker.registry_title')}
+                    </h4>
+                    <span className="text-xs bg-slate-800 text-slate-400 px-2.5 py-0.5 rounded-full font-mono font-bold">{t('citizens_service.dev_tracker.ledger_verified')}</span>
             </div>
             
-            <Table 
-              dataSource={developmentProjects} 
-              columns={columns} 
-              rowKey="id" 
-              pagination={false}
-              className="custom-nested-table-design border border-slate-800/40 rounded-lg overflow-hidden"
-              onRow={(record) => ({
-                onClick: () => setSelectedProject(record),
-                className: `cursor-pointer transition-all duration-150 ${selectedProject?.id === record.id ? 'bg-blue-600/10 hover:bg-blue-600/15' : 'hover:bg-slate-800/30'}`
+            <div className="hidden md:block">
+              <Table 
+                dataSource={developmentProjects} 
+                columns={columns} 
+                rowKey="id" 
+                pagination={false}
+                className="custom-nested-table-design border border-slate-800/40 rounded-lg overflow-hidden"
+                onRow={(record) => ({
+                  onClick: () => setSelectedProject(record),
+                  className: `cursor-pointer transition-all duration-150 ${selectedProject?.id === record.id ? 'bg-blue-600/10 hover:bg-blue-600/15' : 'hover:bg-slate-800/30'}`
+                })}
+              />
+            </div>
+
+            <div className="block md:hidden space-y-3">
+              {developmentProjects.map((project) => {
+                const statusClass = getStatusBadgeClasses(project.status);
+                const statusKey = getStatusKey(project.status);
+
+                return (
+                  <button
+                    key={project.id}
+                    type="button"
+                    onClick={() => setSelectedProject(project)}
+                    className={`w-full rounded-lg border p-3 text-left transition-all ${selectedProject?.id === project.id ? 'border-blue-500/50 bg-blue-600/10' : 'border-slate-800/70 bg-[#0b111e] hover:border-slate-700'}`}
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold text-white">{project.name}</p>
+                        <p className="mt-1 text-xs text-slate-400">{project.ward}</p>
+                      </div>
+                      <span className={`inline-flex items-center rounded-full border px-2.5 py-1 text-[10px] font-semibold ${statusClass}`}>
+                        {t(`citizens_service.status.${statusKey}`)}
+                      </span>
+                    </div>
+
+                    <div className="mt-3 flex items-center justify-between gap-2 text-xs text-slate-400">
+                      <span>Progress {project.progress}%</span>
+                      <span className="font-mono text-slate-200">{project.budget}</span>
+                    </div>
+
+                    <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-slate-800">
+                      <div
+                        className={`h-full transition-all duration-500 ${project.progress > 70 ? 'bg-green-500' : project.progress > 40 ? 'bg-amber-500' : 'bg-red-500'}`}
+                        style={{ width: `${project.progress}%` }}
+                      />
+                    </div>
+                  </button>
+                );
               })}
-            />
+            </div>
           </div>
 
           {/* ROW 3: DETAILED FRAMEWORK DATA ASSESSMENT ASSIGNMENT SPECIFICATION SUMMARY */}
           <div className="bg-[#101726] border border-slate-800/80 rounded-xl p-4 shadow-xl">
             <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 pb-2 border-b border-slate-800/50 m-0">
-              Selected Capital Project Infrastructure Specification Profile
+              {t('citizens_service.details.panel_title')}
             </h3>
             
             {selectedProject ? (
@@ -373,7 +435,7 @@ const DevelopmentProjectTracker: React.FC = () => {
                       </div>
                       <div>
                         <span className="text-slate-500 block text-[11px] font-bold uppercase tracking-wider mb-0.5">Current Progress</span>
-                        <span className="text-green-400 font-mono font-bold">{selectedProject.progress}% Solidified</span>
+                        <span className="text-green-400 font-mono font-bold">{selectedProject.progress}% Completed</span>
                       </div>
                     </div>
                   </div>
@@ -382,7 +444,7 @@ const DevelopmentProjectTracker: React.FC = () => {
             ) : (
               <div className="h-[120px] flex flex-col items-center justify-center border border-dashed border-slate-800/60 rounded-xl text-slate-500">
                 <InboxOutlined className="text-2xl mb-2" />
-                <p className="text-xs">Highlight any structural layout ledger entry row above to pull live engineering data specs.</p>
+                <p className="text-xs">{t('citizens_service.feed.empty_state')}</p>
               </div>
             )}
           </div>
@@ -394,71 +456,63 @@ const DevelopmentProjectTracker: React.FC = () => {
             <div className="bg-[#101726] border border-slate-800/80 rounded-xl p-4 shadow-lg flex flex-col justify-between">
               <div>
                   <h4 className="text-sm font-bold uppercase tracking-wider text-slate-300 mb-3 flex items-center gap-2 border-b border-slate-800/60 pb-2">
-                    <BarChartOutlined className="text-blue-400 text-base" /> Structural Progress Percentages by Ward Sector
+                    <BarChartOutlined className="text-blue-400 text-base" /> {t('citizens_service.charts.ward_performance_title')}
                   </h4>
                   <div className="bg-[#090e18]/40 p-1.5 rounded-lg border border-slate-800/40">
                     <HighchartsReact highcharts={Highcharts} options={progressOverviewOptions} />
                   </div>
                 </div>
                 <div className="mt-3 pt-2 border-t border-slate-800/40">
-                  <h5 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-1">Ward Engineering Performance Metrics</h5>
-                  <p className="text-sm text-slate-400 leading-relaxed font-normal m-0">
-                    Displays ward progress percentages using actual completion data. Ward 1 is at 90%, Ward 2 at 75%, Ward 3 at 20%, Ward 4 at 45%, Ward 5 at 60%, Ward 6 at 85%, and Ward 7 at 30%.
-                  </p>
+                  <h5 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-1">{t('citizens_service.dev_tracker.ward_performance_metrics')}</h5>
+                  <p className="text-sm text-slate-400 leading-relaxed font-normal m-0">{t('citizens_service.dev_tracker.ward_performance_summary')}</p>
                 </div>
             </div>
 
             {/* Chart 2 */}
             <div className="bg-[#101726] border border-slate-800/80 rounded-xl p-4 shadow-lg flex flex-col justify-between">
               <div>
-                  <h4 className="text-sm font-bold uppercase tracking-wider text-slate-300 mb-3 flex items-center gap-2 border-b border-slate-800/60 pb-2">
-                    <PieChartOutlined className="text-purple-400 text-base" /> Municipal Treasury Fund Disbursement Allocation
+                    <h4 className="text-sm font-bold uppercase tracking-wider text-slate-300 mb-3 flex items-center gap-2 border-b border-slate-800/60 pb-2">
+                    <PieChartOutlined className="text-purple-400 text-base" /> {t('citizens_service.dev_tracker.treasury_allocation_title')}
                   </h4>
                   <div className="bg-[#090e18]/40 p-1.5 rounded-lg border border-slate-800/40">
                     <HighchartsReact highcharts={Highcharts} options={budgetPieOptions} />
                   </div>
                 </div>
                 <div className="mt-3 pt-2 border-t border-slate-800/40">
-                  <h5 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-1">Treasury Liquidity Balance Analysis</h5>
-                  <p className="text-sm text-slate-400 leading-relaxed font-normal m-0">
-                    Displays treasury allocation outcomes for active capital works. 65.2% of the pool is disbursed for active project spend, while 34.8% remains as unspent reserve.
-                  </p>
+                  <h5 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-1">{t('citizens_service.dev_tracker.treasury_summary_title')}</h5>
+                  <p className="text-sm text-slate-400 leading-relaxed font-normal m-0">{t('citizens_service.dev_tracker.treasury_summary')}</p>
                 </div>
             </div>
 
             {/* Chart 3 */}
             <div className="bg-[#101726] border border-slate-800/80 rounded-xl p-4 shadow-lg flex flex-col justify-between">
               <div>
-                  <h4 className="text-sm font-bold uppercase tracking-wider text-slate-300 mb-3 flex items-center gap-2 border-b border-slate-800/60 pb-2">
-                    <LineChartOutlined className="text-amber-400 text-base" /> Temporal Infrastructure Delivery Acceleration Track
+                    <h4 className="text-sm font-bold uppercase tracking-wider text-slate-300 mb-3 flex items-center gap-2 border-b border-slate-800/60 pb-2">
+                    <LineChartOutlined className="text-amber-400 text-base" /> {t('citizens_service.dev_tracker.delivery_track_title')}
                   </h4>
                   <div className="bg-[#090e18]/40 p-1.5 rounded-lg border border-slate-800/40">
                     <HighchartsReact highcharts={Highcharts} options={projectSummaryLineOptions} />
                   </div>
                 </div>
                 <div className="mt-3 pt-2 border-t border-slate-800/40">
-                  <h5 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-1">Quarterly Mobilization Volume Log</h5>
-                  <p className="text-sm text-slate-400 leading-relaxed font-normal m-0">
-                    Tracks active project counts over six quarters. The area curve rises steadily from 12 projects in Q1 2025 to 28 projects by Q2 2026.
-                  </p>
+                  <h5 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-1">{t('citizens_service.dev_tracker.delivery_track_subtitle')}</h5>
+                  <p className="text-sm text-slate-400 leading-relaxed font-normal m-0">{t('citizens_service.dev_tracker.delivery_track_summary')}</p>
                 </div>
             </div>
 
             {/* Chart 4 */}
             <div className="bg-[#101726] border border-slate-800/80 rounded-xl p-4 shadow-lg flex flex-col justify-between">
               <div>
-                  <h4 className="text-sm font-bold uppercase tracking-wider text-slate-300 mb-3 flex items-center gap-2 border-b border-slate-800/60 pb-2">
-                    <BarChartOutlined className="text-pink-500 text-base" /> Capital Resource Volume Layout Across Public Sectors
+                    <h4 className="text-sm font-bold uppercase tracking-wider text-slate-300 mb-3 flex items-center gap-2 border-b border-slate-800/60 pb-2">
+                    <BarChartOutlined className="text-pink-500 text-base" /> {t('citizens_service.dev_tracker.capital_resource_title')}
                   </h4>
                   <div className="bg-[#090e18]/40 p-1.5 rounded-lg border border-slate-800/40">
                     <HighchartsReact highcharts={Highcharts} options={sectorDistributionOptions} />
                   </div>
                 </div>
                 <div className="mt-3 pt-2 border-t border-slate-800/40">
-                  <h5 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-1">Sector Budgetary Weight Distribution</h5>
-                  <p className="text-sm text-slate-400 leading-relaxed font-normal m-0">
-                    Shows budget allocation share by sector. Roadways lead with 69.0M NPR, water systems follow with 19.5M, health sector projects have 15.2M, and civic buildings hold 11.1M.
-                  </p>
+                  <h5 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-1">{t('citizens_service.dev_tracker.capital_resource_subtitle')}</h5>
+                  <p className="text-sm text-slate-400 leading-relaxed font-normal m-0">{t('citizens_service.dev_tracker.capital_resource_summary')}</p>
                 </div>
             </div>
 
@@ -475,10 +529,21 @@ const DevelopmentProjectTracker: React.FC = () => {
 
       {/* Complete CSS Overrides Injector */}
       <style>{`
+        .custom-nested-table-design { width: 100%; overflow-x: auto; }
         .custom-nested-table-design .ant-table { background: transparent !important; color: #cbd5e1 !important; }
-        .custom-nested-table-design .ant-table-thead > tr > th { background: #0b111e !important; color: #94a3b8 !important; font-size: 11px !important; text-transform: uppercase !important; font-weight: 800 !important; letter-spacing: 0.05em; border-bottom: 1px solid #1e293b !important; padding: 10px 12px !important; }
-        .custom-nested-table-design .ant-table-tbody > tr > td { border-bottom: 1px solid #1e293b/40 !important; padding: 10px 12px !important; }
-        .custom-nested-table-design .ant-table-tbody > tr.bg-blue-600\\/10 > td { background: rgba(37, 99, 235, 0.12) !important; }
+        .custom-nested-table-design .ant-table-container { overflow-x: auto; }
+        .custom-nested-table-design .ant-table-content { overflow-x: auto; }
+        .custom-nested-table-design .ant-table-thead > tr > th { background: #0b111e !important; color: #94a3b8 !important; font-size: 11px !important; text-transform: uppercase !important; font-weight: 800 !important; letter-spacing: 0.05em; border-bottom: 1px solid #1e293b !important; padding: 10px 12px !important; white-space: nowrap; }
+        .custom-nested-table-design .ant-table-tbody > tr > td { border-bottom: 1px solid rgba(30, 41, 59, 0.4) !important; padding: 10px 12px !important; }
+        .custom-nested-table-design .ant-table-tbody > tr.bg-blue-600\/10 > td { background: rgba(37, 99, 235, 0.12) !important; }
+
+        @media (max-width: 768px) {
+          .custom-nested-table-design .ant-table-thead > tr > th,
+          .custom-nested-table-design .ant-table-tbody > tr > td {
+            padding: 8px 10px !important;
+            font-size: 10px !important;
+          }
+        }
       `}</style>
     </div>
   );

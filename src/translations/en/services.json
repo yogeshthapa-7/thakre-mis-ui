@@ -1,0 +1,107 @@
+{
+  "citizens_service": {
+    "title": "Citizen Services Dashboard",
+    "title1":"Project Development Tracker Dashboard",
+    "subtitle": "Monitor live issue reports, GIS response activity, and municipal service delivery.",
+    "map": {
+      "title": "Interactive GIS Map for Project Development Tracker",
+      "osm_view": "OSM View",
+      "satellite_view": "Satellite View"
+    },
+    "form": {
+      "title": "Submit a New Citizen Request",
+      "description": "Use this form to register infrastructure issues directly into our live dispatch log. Select an appropriate category, pin down your location or landmark details, and upload an optional photograph to help our municipal response teams review, prioritize, and clear the incident efficiently.",
+      "category": "Issue Category",
+      "location": "ward",
+      "description_label": "Description",
+      "upload_image": "Upload Image",
+      "your_name": "Your Name",
+      "contact_number": "Contact Number",
+      "email_address": "Email Address",
+      "submit_request": "Submit Request",
+      "location_placeholder": "Enter specific location",
+      "description_placeholder": "Describe the issue in detail (e.g. pressure drops, exact pipe dimensions, hazard levels)...",
+      "upload_placeholder": "Click or Drag Asset Photo Here",
+      "name_placeholder": "Enter your full name",
+      "contact_placeholder": "Enter active phone contact",
+      "email_placeholder": "Enter email address"
+    },
+    "feed": {
+      "title": "Live Dispatch Feed",
+      "active_records": "Active Records",
+      "empty_state": "Select an entry from the live dispatch streams to inspect deep details."
+    },
+    "metrics": {
+      "total_requests": "Total Requests",
+      "total_requests_desc": "Total issues reported by citizens",
+      "in_progress": "Current Status",
+      "in_progress_desc": "Current issues being addressed",
+      "resolved": "Resolved",
+      "resolved_desc": "Successfully closed dispatches",
+      "pending": "Pending Alerts",
+      "pending_desc": "High-priority emergency alerts"
+    },
+    "filters": {
+      "infrastructure": "Infrastructure",
+      "water_supply": "Water Supply",
+      "waste_management": "Waste Management",
+      "power_grid": "Power & Energy",
+      "high": "High Priority",
+      "medium": "Medium Priority",
+      "low": "Low Priority"
+    },
+    "details": {
+      "panel_title": "Project Names",
+      "responsible_department": "Responsible Department",
+      "assigned_resource": "Assigned Resource",
+      "issue_assessment": "Issue Assessment",
+      "resolution_target_steps": "RESOLUTION TARGET STEPS",
+      "activity_log": "Activity Transmission Log"
+    },
+    "charts": {
+      "category_allocation_title": "Category Allocation Distribution",
+      "category_allocation_summary": "Breaks down live incident volume by category. Waste management leads with 35% of active reports, followed by roads at 25%, with water and power each contributing 20%.",
+      "monthly_inflow_title": "Physical Progress",
+      "monthly_inflow_summary": "Shows incident reports over January–April. Volume rose from 120 in January to 185 in February, dipped to 140 in March, then climbed to a peak of 210 in April.",
+      "turnaround_title": "Incident Resolution Times",
+      "turnaround_summary": "Compares average resolution times by issue type. Roads average 48 hours, water 72 hours, waste 24 hours, and power repairs are shown at 12 hours.",
+      "ward_performance_title": "Ward Operations Performance Mapping",
+      "ward_performance_summary": "Shows active request distribution by ward. Ward 7 carries the largest share at 45%, followed by Wards 4 and 9 at 20% each, and Ward 3 at 15%."
+    }
+    ,
+    "dev_tracker": {
+      "metrics": {
+        "active_projects_desc": "Active capital works projects tracked",
+        "active_sectors_desc": "Sectors currently undergoing active construction",
+        "expenditure_ratio_desc": "Total expended capital versus treasury balance",
+        "delayed_projects_desc": "Projects flagging significant timeline delays"
+      },
+      "default_project_title": "Development Project",
+      "budget_label": "Budget",
+      "progress_label": "Progress",
+      "registry_title": "Infrastructural Projects Development",
+      "ledger_verified": "Fiscal Year 2082/83",
+      "field_summary_title": "Field Operations Summary & Milestone Assessment Log",
+      "assigned_contractor": "Assigned Lead Contractor Corporation",
+      "target_handover": "Target Handover",
+      "current_progress": "Current Progress",
+      "ward_performance_metrics": "Ward Performance",
+      "ward_performance_summary": "Displays ward progress percentages using actual completion data. Ward 1 is at 90%, Ward 2 at 75%, Ward 3 at 20%, Ward 4 at 45%, Ward 5 at 60%, Ward 6 at 85%, and Ward 7 at 30%.",
+      "treasury_allocation_title": "Fund Allocation",
+      "treasury_summary_title": "Treasury Liquidity Balance Analysis",
+      "treasury_summary": "Displays treasury allocation outcomes for active capital works. 65.2% of the pool is disbursed for active project spend, while 34.8% remains as unspent reserve.",
+      "delivery_track_title": "Project Timeline Tracker",
+      "delivery_track_subtitle": "Quarterly Project Growth",
+      "delivery_track_summary": "Tracks active project counts over six quarters. The area curve rises steadily from 12 projects in Q1 2025 to 28 projects by Q2 2026.",
+      "capital_resource_title": "Budget by Sector",
+      "capital_resource_subtitle": "Sector Budget Share",
+      "capital_resource_summary": "Shows budget allocation share by sector. Roadways lead with 69.0M NPR, water systems follow with 19.5M, health sector projects have 15.2M, and civic buildings hold 11.1M."
+    },
+    "status": {
+      "delayed": "Delayed",
+      "completed": "Completed",
+      "in_progress": "In Progress",
+      "allocated_budget": "Allocated Budget"
+    }
+  }
+}

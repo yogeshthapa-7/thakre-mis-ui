@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import Highcharts from "highcharts";
 import HighchartsReactModule from "highcharts-react-official";
 import { BarChartOutlined } from "@ant-design/icons";
+import {useTranslation} from "react-i18next";
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -13,6 +14,7 @@ const HighchartsReact =
 export const DynamicChartRenderer = () => {
   const { section = "default" } = useParams();
   const [isMounted, setIsMounted] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -60,8 +62,8 @@ export const DynamicChartRenderer = () => {
   const revenueSourcesOptions: Highcharts.Options = {
     ...chartResponsiveConfig,
     chart: { ...chartResponsiveConfig.chart, type: "column" },
-    title: { text: "Revenue Stream Distribution", style: chartResponsiveConfig.title?.style },
-    subtitle: { text: "Fiscal year internal revenue collections vs. provincial allocation grants", style: chartResponsiveConfig.subtitle?.style },
+    title: { text: t("analytics_card1_title"), style: chartResponsiveConfig.title?.style },
+    subtitle: { text: t("analytics_card1_subtitle"), style: chartResponsiveConfig.subtitle?.style },
     xAxis: { ...chartResponsiveConfig.xAxis, categories: ["Property Tax", "Business Licensing", "Central Grants", "Provincial Subsidy", "Service Fees"] },
     yAxis: {
       ...(Array.isArray(chartResponsiveConfig.yAxis) ? chartResponsiveConfig.yAxis[0] : chartResponsiveConfig.yAxis),
@@ -78,8 +80,8 @@ export const DynamicChartRenderer = () => {
   const grievanceTrackingOptions: Highcharts.Options = {
     ...chartResponsiveConfig,
     chart: { ...chartResponsiveConfig.chart, type: "pie" },
-    title: { text: "Citizen Grievance Resolution Rate", style: chartResponsiveConfig.title?.style },
-    subtitle: { text: "Current status of official public complaints submitted via portal", style: chartResponsiveConfig.subtitle?.style },
+    title: { text: t("analytics_card2_title"), style: chartResponsiveConfig.title?.style },
+    subtitle: { text: t("analytics_card2_subtitle"), style: chartResponsiveConfig.subtitle?.style },
     colors: ["#134074", "#10b981", "#faad14"],
     tooltip: { pointFormat: "{series.name}: <b>{point.percentage:.1f}%</b>", style: chartResponsiveConfig.tooltip?.style },
     plotOptions: {
@@ -108,8 +110,8 @@ export const DynamicChartRenderer = () => {
   const infrastructureProgressOptions: Highcharts.Options = {
     ...chartResponsiveConfig,
     chart: { ...chartResponsiveConfig.chart, type: "bar" },
-    title: { text: "Public Infrastructure Trackers", style: chartResponsiveConfig.title?.style },
-    subtitle: { text: "Overall completion rates across active ward construction contracts", style: chartResponsiveConfig.subtitle?.style },
+    title: { text: t("analytics_card3_title"), style: chartResponsiveConfig.title?.style },
+    subtitle: { text: t("analytics_card3_subtitle"), style: chartResponsiveConfig.subtitle?.style },
     xAxis: { ...chartResponsiveConfig.xAxis, categories: ["Ward 3 Road Paving", "Health Post Expansion", "Drinking Water Pipe Layout", "Administrative Building Fixes"] },
     yAxis: {
       ...(Array.isArray(chartResponsiveConfig.yAxis) ? chartResponsiveConfig.yAxis[0] : chartResponsiveConfig.yAxis),
@@ -131,8 +133,8 @@ export const DynamicChartRenderer = () => {
   const budgetBurnOptions: Highcharts.Options = {
     ...chartResponsiveConfig,
     chart: { ...chartResponsiveConfig.chart, type: "area" },
-    title: { text: "Monthly Capital Expenditure Curve", style: chartResponsiveConfig.title?.style },
-    subtitle: { text: "Tracking standard burn-rates across administrative quarters", style: chartResponsiveConfig.subtitle?.style },
+    title: { text: t("analytics_card4_title"), style: chartResponsiveConfig.title?.style },
+    subtitle: { text: t("analytics_card4_subtitle"), style: chartResponsiveConfig.subtitle?.style },
     xAxis: { ...chartResponsiveConfig.xAxis, categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"] },
     yAxis: {
       ...(Array.isArray(chartResponsiveConfig.yAxis) ? chartResponsiveConfig.yAxis[0] : chartResponsiveConfig.yAxis),
@@ -157,11 +159,11 @@ export const DynamicChartRenderer = () => {
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <BarChartOutlined style={{ fontSize: "22px", color: "#134074" }} />
           <Title level={3} style={{ color: "#134074", fontWeight: 800, margin: 0 }}>
-            Municipal Administration & Progress Analytics
+            {t('landing_analytics_title')}
           </Title>
         </div>
         <Paragraph style={{ color: "#64748b", marginTop: "6px", fontSize: "14px" }}>
-          Internal management telemetry tracking administrative budgets, regional development works, and civic registration performance modules.
+         {t('landing_analytics_subtitle')}
         </Paragraph>
       </div>
 

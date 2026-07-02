@@ -534,8 +534,7 @@ const DEPARTMENT_DATABASE: Record<string, DepartmentData> = {
       { lat: 27.75692, lng: 85.05884, title: "Mahadevbesi Revenue Collection Center", desc: "House Tax Payments: 27 Today | Service Charges Collection: Ongoing | Citizen Queue: Moderate", color: "#1e3a8a" },
       { lat: 27.74855, lng: 85.07163, title: "Business Tax & Licensing Desk", desc: "New Business Licenses: 8 Issued | Renewal Requests: 15 Pending | Digital Payment: Available", color: "#1e3a8a" },
       { lat: 27.76148, lng: 85.05126, title: "Municipal Financial Service Center", desc: "Revenue Collection Status: Normal | Citizen Services: Active | Daily Transactions: 61", color: "#1e3a8a" },
-      { lat: 27.74481, lng: 85.07952, title: "Land & Property Tax Help Desk", desc: "Property Record Verification | Tax Assessment Support | Citizen Assistance Counter", color: "#1e3a8a" },
-      { lat: 27.78894, lng: 85.08731, title: "Revenue Facilitation Center", desc: "Municipal Fee Collection | Building Permit Fees | Online Payment Assistance", color: "#1e3a8a" }
+      { lat: 27.74481, lng: 85.07952, title: "Land & Property Tax Help Desk", desc: "Property Record Verification | Tax Assessment Support | Citizen Assistance Counter", color: "#1e3a8a" }
     ],
     notices: [
       { ward: "LRO Dhading", campaignName: "Land Registry Digital Migration", leadPerson: "Ramesh Kumar Adhikari", role: "Chief Land Revenue Officer", details: "Upgrading physical land logs into the central NeLRiS digital portal at Land Revenue Office. Expect short service windows for land transfers.", status: "Critical" },

@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Select, Input, Button, Upload, ConfigProvider, theme } from 'antd';
+import { Select, Form, Input, Button, Upload, ConfigProvider, theme, message } from 'antd';
 import { 
   UploadOutlined, 
   ThunderboltFilled, 
@@ -20,6 +20,7 @@ import _HighchartsReact from "highcharts-react-official";
 // Path mapping reference
 import { GisMap } from '../../Components/gis-map-component-thakre';
 import { GisMarkerDrawer } from '../../Components/gis/GisMarkerDrawer';
+import { useTranslation } from 'react-i18next';
 
 const HighchartsReact = (_HighchartsReact as any).default || _HighchartsReact;
 const { Option } = Select;
@@ -61,10 +62,22 @@ interface MapMarkerData {
   color: string;
 }
 
+interface ServiceRequestFormValues {
+  category: string;
+  location: string;
+  description: string;
+  attachment?: any[];
+  name: string;
+  contactNumber: string;
+  email: string;
+}
+
 const CitizensServiceRequests: React.FC = () => {
+  const { t } = useTranslation();
+  const [form] = Form.useForm<ServiceRequestFormValues>();
   const [drawerVisible, setDrawerVisible] = useState<boolean>(false);
   const [selectedMarker, setSelectedMarker] = useState<MapMarkerData | null>(null);
-  
+
   const [selectedUpdate, setSelectedUpdate] = useState<UpdateItem | null>({
     id: 1, 
     title: 'Water Supply Mainline Leak', 
@@ -83,6 +96,12 @@ const CitizensServiceRequests: React.FC = () => {
   });
 
   const [mapViewMode, setMapViewMode] = useState<"osm" | "satellite">("osm");
+
+  const handleSubmit = (values: ServiceRequestFormValues) => {
+    console.log('Service request submitted:', values);
+    message.success('Your service request has been submitted successfully.');
+    form.resetFields();
+  };
 
   const recentUpdates: UpdateItem[] = useMemo(() => [
     { 
@@ -169,12 +188,12 @@ const mapMarkers: MapMarkerData[] = useMemo(() => {
     });
   }, [recentUpdates]);
 
-  const metricCards: MetricCardItem[] = useMemo(() => [
-    { title: 'Total Requests', val: '328', desc: 'Total issues reported by citizens', icon: <ContainerOutlined className="text-blue-400 text-base" />, color: 'text-white' },
-    { title: 'Issues In Progress', val: '92', desc: 'Current issues being addressed', icon: <ThunderboltFilled className="text-amber-500 text-base" />, color: 'text-amber-500' },
-    { title: 'Resolved Cases', val: '214', desc: 'Successfully closed dispatches', icon: <CheckCircleFilled className="text-green-500 text-base" />, color: 'text-green-500' },
-    { title: 'Urgent Dispatches', val: '22', desc: 'High-priority emergency alerts', icon: <WarningFilled className="text-red-500 text-base" />, color: 'text-red-500' }
-  ], []);
+const metricCards: MetricCardItem[] = useMemo(() => [
+    { title: t('citizens_service.metrics.total_requests'), val: '328', desc: t('citizens_service.metrics.total_requests_desc'), icon: <ContainerOutlined className="text-blue-400 text-base" />, color: 'text-white' },
+    { title: t('citizens_service.metrics.in_progress'), val: '92', desc: t('citizens_service.metrics.in_progress_desc'), icon: <ThunderboltFilled className="text-amber-500 text-base" />, color: 'text-amber-500' },
+    { title: t('citizens_service.metrics.resolved'), val: '214', desc: t('citizens_service.metrics.resolved_desc'), icon: <CheckCircleFilled className="text-green-500 text-base" />, color: 'text-green-500' },
+    { title: t('citizens_service.metrics.pending'), val: '22', desc: t('citizens_service.metrics.pending_desc'), icon: <WarningFilled className="text-red-500 text-base" />, color: 'text-red-500' }
+  ], [t]);
 
   // HIGHCHARTS CONFIGURATIONS
   const pieChartOptions1 = useMemo(() => ({
@@ -259,8 +278,8 @@ const handleMapIncidentSelect = (marker: MapMarkerData) => {
           <div className="flex items-center gap-3">
             <span className="text-blue-500 opacity-90 text-base"><BankOutlined /></span>
             <div>
-              <p className="text-base font-bold text-slate-100 m-0">Thakre Municipality Citizen Service Portal</p>
-              <p className="text-sm text-slate-400 m-0">Live issue reporting and operational dispatch management</p>
+              <p className="text-base font-bold text-slate-100 m-0">{t('citizens_service.title')}</p>
+              <p className="text-sm text-slate-400 m-0">{t('citizens_service.subtitle')}</p>
             </div>
           </div>
         </div>
@@ -275,7 +294,7 @@ const handleMapIncidentSelect = (marker: MapMarkerData) => {
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-3 border-b border-slate-800/60 mb-3">
                 <div>
                   <h3 className="text-lg font-bold text-white tracking-wide flex items-center gap-2">
-                    <span className="text-white animate-fade" > Interactive GIS Map for Citizen Issue Management </span>
+                    <span className="text-white animate-fade">{t('citizens_service.map.title')}</span>
                   </h3>
                 </div>
                 
@@ -284,13 +303,13 @@ const handleMapIncidentSelect = (marker: MapMarkerData) => {
                     onClick={() => setMapViewMode("osm")} 
                     className={`text-sm font-semibold px-3 py-2 rounded transition-colors ${mapViewMode === 'osm' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-slate-200'}`}
                   >
-                    OSM View
+                    {t('citizens_service.map.osm_view')}
                   </button>
                   <button 
                     onClick={() => setMapViewMode("satellite")} 
                     className={`text-sm font-semibold px-3 py-2 rounded transition-colors ${mapViewMode === 'satellite' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-slate-200'}`}
                   >
-                    Satellite View
+                    {t('citizens_service.map.satellite_view')}
                   </button>
                 </div>
               </div>
@@ -330,84 +349,148 @@ const handleMapIncidentSelect = (marker: MapMarkerData) => {
               <div className="flex flex-col h-full justify-between gap-4">
                 <div>
                   <h3 className="text-base font-bold border-b border-slate-800/60 pb-2 mb-2 text-white tracking-wide flex items-center gap-2 m-0">
-                    Submit a New Citizen Request
+                    {t('citizens_service.form.title')}
                   </h3>
                   <p className="text-sm text-slate-400 leading-relaxed font-normal m-0">
-                    Use this form to register infrastructure issues directly into our live dispatch log. Select an appropriate category, pin down your location or landmark details, and upload an optional photograph to help our municipal response teams review, prioritize, and clear the incident efficiently.
+                    {t('citizens_service.form.description')}
                   </p>
                 </div>
                 
-                <div className="flex-1 flex flex-col justify-between gap-4 py-2">
-                  <div className="grid grid-cols-3 gap-3 items-center">
-                    <label className="text-sm font-semibold text-slate-300">Issue Category</label>
-                    <div className="col-span-2">
-                      <Select defaultValue="road" className="w-full">
-                        <Option value="road">Road Maintenance</Option>
-                        <Option value="water">Water Supply</Option>
-                        <Option value="waste">Waste Management</Option>
-                      </Select>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-3 items-center">
-                    <label className="text-sm font-semibold text-slate-300">Location</label>
-                    <div className="col-span-2">
-                      <Input placeholder="Enter specific location" className="bg-[#151f33] border-slate-700 text-white h-10 text-sm" />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-3 items-start flex-1 min-h-[90px]">
-                    <label className="text-sm font-semibold text-slate-300 pt-2">Description</label>
-                    <div className="col-span-2 h-full flex">
-                      <TextArea 
-                        rows={4} 
-                        placeholder="Describe the issue in detail (e.g. pressure drops, exact pipe dimensions, hazard levels)..." 
-                        className="bg-[#151f33] border-slate-700 text-white text-sm resize-none flex-1 h-full min-h-full" 
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-3 items-center">
-                    <label className="text-sm font-semibold text-slate-300">Upload Image</label>
-                    <div className="col-span-2">
-                      <Upload maxCount={1} className="w-full block">
-                        <Button 
-                          icon={<UploadOutlined className="text-blue-400 text-base" />} 
-                          className="w-full bg-[#151f33] hover:bg-[#1b273d] border border-dashed border-slate-700 text-slate-300 flex items-center justify-center gap-2 h-11 px-3 transition-colors rounded-lg text-sm"
+                <Form
+                  form={form}
+                  layout="vertical"
+                  onFinish={handleSubmit}
+                  className="flex-1 flex flex-col justify-between gap-4 py-2"
+                >
+                  <div className="grid gap-3">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-start">
+                      <label className="text-sm font-semibold text-slate-300 pt-1">{t('citizens_service.form.category')}</label>
+                      <div className="md:col-span-2">
+                        <Form.Item
+                          name="category"
+                          initialValue="road"
+                          rules={[{ required: true, message: 'Please select a service category.' }]}
+                          className="mb-0"
                         >
-                          <span>Click or Drag Asset Photo Here</span>
-                        </Button>
-                      </Upload>
+                          <Select placeholder={t('citizens_service.form.category')} className="w-full">
+                            <Option value="road">{t('citizens_service.filters.infrastructure')}</Option>
+                            <Option value="water">{t('citizens_service.filters.water_supply')}</Option>
+                            <Option value="waste">{t('citizens_service.filters.waste_management')}</Option>
+                          </Select>
+                        </Form.Item>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-start">
+                      <label className="text-sm font-semibold text-slate-300 pt-1">{t('citizens_service.form.location')}</label>
+                      <div className="md:col-span-2">
+                        <Form.Item
+                          name="location"
+                          rules={[
+                            { required: true, message: 'Please enter the location.' },
+                            { min: 3, message: 'Location must be at least 3 characters.' }
+                          ]}
+                          className="mb-0"
+                        >
+                          <Input placeholder={t('citizens_service.form.location_placeholder')} className="bg-[#151f33] border-slate-700 text-white h-10 text-sm" />
+                        </Form.Item>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-start min-h-[90px]">
+                      <label className="text-sm font-semibold text-slate-300 pt-1">{t('citizens_service.form.description_label')}</label>
+                      <div className="md:col-span-2 h-full flex">
+                        <Form.Item
+                          name="description"
+                          rules={[
+                            { required: true, message: 'Please describe the issue.' },
+                            { min: 10, message: 'Description must be at least 10 characters.' }
+                          ]}
+                          className="mb-0 w-full"
+                        >
+                          <TextArea
+                            rows={4}
+                            placeholder={t('citizens_service.form.description_placeholder')}
+                            className="bg-[#151f33] border-slate-700 text-white text-sm resize-none flex-1 h-full min-h-full"
+                          />
+                        </Form.Item>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-start">
+                      <label className="text-sm font-semibold text-slate-300 pt-1">{t('citizens_service.form.upload_image')}</label>
+                      <div className="md:col-span-2">
+                        <Form.Item name="attachment" valuePropName="fileList" getValueFromEvent={(e) => Array.isArray(e) ? e : e?.fileList} className="mb-0">
+                          <Upload maxCount={1} className="w-full block">
+                            <Button
+                              icon={<UploadOutlined className="text-blue-400 text-base" />}
+                              className="w-full bg-[#151f33] hover:bg-[#1b273d] border border-dashed border-slate-700 text-slate-300 flex items-center justify-center gap-2 h-11 px-3 transition-colors rounded-lg text-sm"
+                            >
+                              <span>{t('citizens_service.form.upload_placeholder')}</span>
+                            </Button>
+                          </Upload>
+                        </Form.Item>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-start">
+                      <label className="text-sm font-semibold text-slate-300 pt-1">{t('citizens_service.form.your_name')}</label>
+                      <div className="md:col-span-2">
+                        <Form.Item
+                          name="name"
+                          rules={[
+                            { required: true, message: 'Please enter your name.' },
+                            { min: 2, message: 'Name must be at least 2 characters.' }
+                          ]}
+                          className="mb-0"
+                        >
+                          <Input placeholder={t('citizens_service.form.name_placeholder')} className="bg-[#151f33] border-slate-700 text-white h-10 text-sm" />
+                        </Form.Item>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-start">
+                      <label className="text-sm font-semibold text-slate-300 pt-1">{t('citizens_service.form.contact_number')}</label>
+                      <div className="md:col-span-2">
+                        <Form.Item
+                          name="contactNumber"
+                          rules={[
+                            { required: true, message: 'Please enter your contact number.' },
+                            {
+                              pattern: /^[0-9]{10}$/,
+                              message: 'Contact number must be 10 digits.'
+                            }
+                          ]}
+                          className="mb-0"
+                        >
+                          <Input placeholder={t('citizens_service.form.contact_placeholder')} className="bg-[#151f33] border-slate-700 text-white h-10 text-sm" />
+                        </Form.Item>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-start">
+                      <label className="text-sm font-semibold text-slate-300 pt-1">{t('citizens_service.form.email_address')}</label>
+                      <div className="md:col-span-2">
+                        <Form.Item
+                          name="email"
+                          rules={[
+                            { required: true, message: 'Please enter your email address.' },
+                            { type: 'email', message: 'Please enter a valid email address.' }
+                          ]}
+                          className="mb-0"
+                        >
+                          <Input placeholder={t('citizens_service.form.email_placeholder')} className="bg-[#151f33] border-slate-700 text-white h-10 text-sm" />
+                        </Form.Item>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-3 gap-3 items-center">
-                    <label className="text-sm font-semibold text-slate-300">Your Name</label>
-                    <div className="col-span-2">
-                      <Input placeholder="Enter your full name" className="bg-[#151f33] border-slate-700 text-white h-10 text-sm" />
-                    </div>
+                  <div className="pt-2">
+                    <Button htmlType="submit" type="primary" className="w-full h-11 font-bold text-sm bg-gradient-to-b from-[#1e5bc6] to-[#123e91] border border-blue-500/20 rounded-lg shadow-lg hover:opacity-95 transition-all m-0">
+                      {t('citizens_service.form.submit_request')}
+                    </Button>
                   </div>
-
-                  <div className="grid grid-cols-3 gap-3 items-center">
-                    <label className="text-sm font-semibold text-slate-300">Contact Number</label>
-                    <div className="col-span-2">
-                      <Input placeholder="Enter active phone contact" className="bg-[#151f33] border-slate-700 text-white h-10 text-sm" />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-3 items-center">
-                    <label className="text-sm font-semibold text-slate-300">Email Address</label>
-                    <div className="col-span-2">
-                      <Input placeholder="Enter email address" className="bg-[#151f33] border-slate-700 text-white h-10 text-sm" />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="pt-2">
-                  <Button type="primary" className="w-full h-11 font-bold text-sm bg-gradient-to-b from-[#1e5bc6] to-[#123e91] border border-blue-500/20 rounded-lg shadow-lg hover:opacity-95 transition-all m-0">
-                    Submit Request
-                  </Button>
-                </div>
+                </Form>
               </div>
             </div>
 
@@ -417,8 +500,8 @@ const handleMapIncidentSelect = (marker: MapMarkerData) => {
               <div className="bg-[#101726] border border-slate-800/80 rounded-xl p-4 shadow-[0_15px_35px_rgba(0,0,0,0.6)] flex-1 flex flex-col justify-between">
                 <div>
                   <div className="flex justify-between items-center border-b border-slate-800/60 pb-2 mb-3">
-                    <h3 className="text-sm font-bold text-slate-200 tracking-wide">Live Issues Feed</h3>
-                    <span className="text-[11px] bg-slate-800 text-slate-400 px-2.5 py-0.5 rounded-full font-mono font-bold">{recentUpdates.length} Active Records</span>
+                    <h3 className="text-sm font-bold text-slate-200 tracking-wide">{t('citizens_service.feed.title')}</h3>
+                    <span className="text-[11px] bg-slate-800 text-slate-400 px-2.5 py-0.5 rounded-full font-mono font-bold">{recentUpdates.length} {t('citizens_service.feed.active_records')}</span>
                   </div>
                   
                   <div className="divide-y divide-slate-800/50 max-h-[250px] overflow-y-auto pr-1 custom-scrollbar">
@@ -443,7 +526,7 @@ const handleMapIncidentSelect = (marker: MapMarkerData) => {
                           <div className="space-y-1 flex-1 min-w-0">
                             <div className="flex items-center gap-2">
                               <span className={`text-[10px] uppercase font-extrabold px-2 py-0.5 rounded border tracking-wider ${wardBadgeColor}`}>
-                                {wardLabel}
+                                {t(`citizens_service.filters.${item.priority.toLowerCase()}`)}
                               </span>
                               <h4 className="text-xs font-bold text-white truncate">{item.title}</h4>
                             </div>
@@ -460,7 +543,7 @@ const handleMapIncidentSelect = (marker: MapMarkerData) => {
               {/* Enhanced Update Details */}
               <div className="bg-[#101726] border border-slate-800/80 rounded-xl p-4 shadow-[0_15px_35px_rgba(0,0,0,0.6)] flex-1 flex flex-col">
                 <h3 className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-3 pb-2 border-b border-slate-800/50">
-                  Issues Updates Details
+                  {t('citizens_service.details.panel_title')}
                 </h3>
                 
                 <div className="max-h-[320px] overflow-y-auto flex-1 custom-scrollbar pr-1">
@@ -469,23 +552,23 @@ const handleMapIncidentSelect = (marker: MapMarkerData) => {
                       
                       <div className="grid grid-cols-2 gap-y-2 gap-x-3 border-b border-slate-800/50 pb-3 text-xs">
                         <div>
-                          <span className="text-slate-500 block text-[10px] font-bold uppercase tracking-wider mb-0.5">Responsible Department</span>
+                          <span className="text-slate-500 block text-[10px] font-bold uppercase tracking-wider mb-0.5">{t('citizens_service.details.responsible_department')}</span>
                           <span className="text-slate-200 font-semibold">{selectedUpdate.department}</span>
                         </div>
                         <div>
-                          <span className="text-slate-500 block text-[10px] font-bold uppercase tracking-wider mb-0.5">Assigned Resource</span>
+                          <span className="text-slate-500 block text-[10px] font-bold uppercase tracking-wider mb-0.5">{t('citizens_service.details.assigned_resource')}</span>
                           <span className="text-slate-200 font-semibold">{selectedUpdate.assignedTo}</span>
                         </div>
                       </div>
 
                       <div>
-                        <span className="text-slate-500 block text-[10px] font-bold uppercase tracking-wider mb-1">Issue Assessment</span>
+                        <span className="text-slate-500 block text-[10px] font-bold uppercase tracking-wider mb-1">{t('citizens_service.details.issue_assessment')}</span>
                         <p className="text-xs text-slate-300 leading-relaxed font-normal">{selectedUpdate.sub}</p>
                       </div>
 
                       <div>
                         <div className="flex justify-between text-[11px] font-bold text-slate-400 mb-1 tracking-wide">
-                          <span>RESOLUTION TARGET STEPS</span>
+                          <span>{t('citizens_service.details.resolution_target_steps')}</span>
                           <span className={selectedUpdate.progress === 100 ? "text-green-400" : "text-blue-400"}>
                             {selectedUpdate.progress}% Complete
                           </span>
@@ -499,7 +582,7 @@ const handleMapIncidentSelect = (marker: MapMarkerData) => {
                       </div>
 
                       <div>
-                        <span className="text-slate-500 block text-[10px] font-bold uppercase tracking-wider mb-2">Activity Transmission Log</span>
+                        <span className="text-slate-500 block text-[10px] font-bold uppercase tracking-wider mb-2">{t('citizens_service.details.activity_log')}</span>
                         <div className="space-y-3 border-l-2 border-slate-800 pl-3 ml-1 relative">
                           {selectedUpdate.timeline.map((log, index) => (
                             <div key={index} className="relative text-xs">
@@ -520,7 +603,7 @@ const handleMapIncidentSelect = (marker: MapMarkerData) => {
                   ) : (
                     <div className="h-full min-h-[200px] flex flex-col items-center justify-center border border-dashed border-slate-800/60 rounded-lg text-slate-500">
                       <InboxOutlined className="text-2xl text-slate-600 mb-2" />
-                      <p className="text-xs font-semibold">Select an entry from the live dispatch streams to inspect deep details.</p>
+                      <p className="text-xs font-semibold">{t('citizens_service.feed.empty_state')}</p>
                     </div>
                   )}
                 </div>
@@ -534,16 +617,16 @@ const handleMapIncidentSelect = (marker: MapMarkerData) => {
             
             <div className="bg-[#101726] border border-slate-800/80 rounded-xl p-4 shadow-[0_15px_35px_rgba(0,0,0,0.6)]">
               <h4 className="text-sm font-bold uppercase tracking-wider text-slate-300 mb-3 flex items-center gap-2 border-b border-slate-800/60 pb-2">
-                <PieChartOutlined className="text-blue-400 text-base" /> Category Allocation Distribution
+                <PieChartOutlined className="text-blue-400 text-base" /> {t('citizens_service.charts.category_allocation_title')}
               </h4>
               <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
                 <div className="md:col-span-6 bg-[#090e18]/40 p-1.5 rounded-lg border border-slate-800/40">
                   <HighchartsReact highcharts={Highcharts} options={pieChartOptions1} />
                 </div>
                 <div className="md:col-span-6 space-y-2">
-                  <h5 className="text-sm font-bold text-slate-300">Context Analytics Summary</h5>
+                  <h5 className="text-sm font-bold text-slate-300">{t('citizens_service.charts.category_allocation_title')}</h5>
                   <p className="text-sm text-slate-400 leading-relaxed font-normal">
-                    Breaks down live incident volume by category. Waste management leads with 35% of active reports, followed by roads at 25%, with water and power each contributing 20%.
+                    {t('citizens_service.charts.category_allocation_summary')}
                   </p>
                 </div>
               </div>
@@ -551,16 +634,16 @@ const handleMapIncidentSelect = (marker: MapMarkerData) => {
 
             <div className="bg-[#101726] border border-slate-800/80 rounded-xl p-4 shadow-[0_15px_35px_rgba(0,0,0,0.6)]">
               <h4 className="text-sm font-bold uppercase tracking-wider text-slate-300 mb-3 flex items-center gap-2 border-b border-slate-800/60 pb-2">
-                <LineChartOutlined className="text-amber-500 text-base" /> Monthly Incident Inflow Progression
+                <LineChartOutlined className="text-amber-500 text-base" /> {t('citizens_service.charts.monthly_inflow_title')}
               </h4>
               <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
                 <div className="md:col-span-6 bg-[#090e18]/40 p-1.5 rounded-lg border border-slate-800/40">
                   <HighchartsReact highcharts={Highcharts} options={lineChartOptions} />
                 </div>
                 <div className="md:col-span-6 space-y-2">
-                  <h5 className="text-sm font-bold text-slate-300">Context Analytics Summary</h5>
+                  <h5 className="text-sm font-bold text-slate-300">{t('citizens_service.charts.monthly_inflow_title')}</h5>
                   <p className="text-sm text-slate-400 leading-relaxed font-normal">
-                    Shows incident reports over January–April. Volume rose from 120 in January to 185 in February, dipped to 140 in March, then climbed to a peak of 210 in April.
+                    {t('citizens_service.charts.monthly_inflow_summary')}
                   </p>
                 </div>
               </div>
@@ -568,16 +651,16 @@ const handleMapIncidentSelect = (marker: MapMarkerData) => {
 
             <div className="bg-[#101726] border border-slate-800/80 rounded-xl p-4 shadow-[0_15px_35px_rgba(0,0,0,0.6)]">
               <h4 className="text-sm font-bold uppercase tracking-wider text-slate-300 mb-3 flex items-center gap-2 border-b border-slate-800/60 pb-2">
-                <BarChartOutlined className="text-green-500 text-base" /> Resolution Dispatch Turnaround Times
+                <BarChartOutlined className="text-green-500 text-base" /> {t('citizens_service.charts.turnaround_title')}
               </h4>
               <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
                 <div className="md:col-span-6 bg-[#090e18]/40 p-1.5 rounded-lg border border-slate-800/40">
                   <HighchartsReact highcharts={Highcharts} options={columnChartOptions} />
                 </div>
                 <div className="md:col-span-6 space-y-2">
-                  <h5 className="text-sm font-bold text-slate-300">Context Analytics Summary</h5>
+                  <h5 className="text-sm font-bold text-slate-300">{t('citizens_service.charts.turnaround_title')}</h5>
                   <p className="text-sm text-slate-400 leading-relaxed font-normal">
-                    Compares average resolution times by issue type. Roads average 48 hours, water 72 hours, waste 24 hours, and power repairs are shown at 12 hours.
+                    {t('citizens_service.charts.turnaround_summary')}
                   </p>
                 </div>
               </div>
@@ -585,16 +668,16 @@ const handleMapIncidentSelect = (marker: MapMarkerData) => {
 
             <div className="bg-[#101726] border border-slate-800/80 rounded-xl p-4 shadow-[0_15px_35px_rgba(0,0,0,0.6)]">
               <h4 className="text-sm font-bold uppercase tracking-wider text-slate-300 mb-3 flex items-center gap-2 border-b border-slate-800/60 pb-2">
-                <PieChartOutlined className="text-red-500 text-base" /> Ward Operations Performance Mapping
+                <PieChartOutlined className="text-red-500 text-base" /> {t('citizens_service.charts.ward_performance_title')}
               </h4>
               <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
                 <div className="md:col-span-6 bg-[#090e18]/40 p-1.5 rounded-lg border border-slate-800/40">
                   <HighchartsReact highcharts={Highcharts} options={pieChartOptions2} />
                 </div>
                 <div className="md:col-span-6 space-y-2">
-                  <h5 className="text-sm font-bold text-slate-300">Context Analytics Summary</h5>
+                  <h5 className="text-sm font-bold text-slate-300">{t('citizens_service.charts.ward_performance_title')}</h5>
                   <p className="text-sm text-slate-400 leading-relaxed font-normal">
-                    Shows active request distribution by ward. Ward 7 carries the largest share at 45%, followed by Wards 4 and 9 at 20% each, and Ward 3 at 15%.
+                    {t('citizens_service.charts.ward_performance_summary')}
                   </p>
                 </div>
               </div>

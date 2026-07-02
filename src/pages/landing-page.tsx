@@ -144,52 +144,70 @@ export const LandingPage = () => {
 
                 <div className="intro-body-content">
                   <h3 className="underline-title">Introduction</h3>
-                  <p style={{ fontSize: "14px", color: "#334155", lineHeight: "1.7", textAlign: "justify", marginTop: "16px", marginBottom: "24px" }}>
-                    Thakre Rural Municipality is located in Dhading District of Bagmati Province, Nepal. Our municipality is dedicated to fostering sustainable development and improving the quality of life for our citizens. We focus on enhancing infrastructure, education, healthcare, and economic opportunities. Explore our site to stay informed about our initiatives, public services, and community programs working to build a prosperous and inclusive Thakre.
-                  </p>
-                  <button className="gov-btn-primary">Learn More</button>
+                  <p style={{
+  fontSize: "14px",
+  color: "#334155",
+  lineHeight: "1.7",
+  textAlign: "justify",
+  marginTop: "16px",
+  marginBottom: "24px"
+}}>
+  Thakre Rural Municipality is located in Dhading District of Bagmati Province, Nepal. Our municipality is dedicated to fostering sustainable development and improving the quality of life for our citizens. We focus on enhancing infrastructure, education, healthcare, and economic opportunities. Explore our site to stay informed about our initiatives, public services, and community programs working to build a prosperous and inclusive Thakre.
+</p>
+
+<span style={{
+  fontSize: "14px",
+  color: "#334155",
+  lineHeight: "1.7",
+  textAlign: "justify",
+  display: "block",
+  marginTop: "16px",
+  marginBottom: "24px"
+}}>
+  Thakre Rural Municipality is located in Dhading District of Bagmati Province, Nepal. Our municipality is dedicated to fostering sustainable development and improving the quality of life for our citizens. We focus on enhancing infrastructure, education, healthcare, and economic opportunities. Explore our site to stay informed about our initiatives, public services, and community programs working to build a prosperous and inclusive Thakre.
+</span>
                 </div>
               </Col>
 
               {/* RIGHT SIDE COLUMN: Key Municipal Indicators Panel */}
               <Col xs={24} md={13} className="indicators-side">
-                <h3 className="indicator-section-title">Key Municipal Indicators</h3>
+                <h3 className="indicator-section-title">{t('key_municipal_indicators')}</h3>
                 
                 {/* 2x2 Square Cards Grid Connected to Live Chart Constants */}
                 <Row gutter={[16, 16]}>
                   <Col xs={12}>
                     <div className="indicator-card-square">
                       <TeamOutlined className="indicator-card-icon" />
-                      <span className="indicator-card-label">Grievance Resolution</span>
+                      <span className="indicator-card-label">{t('key_municipal_indicators_card1')}</span>
                       <h4 className="indicator-card-value highlighted">{resolvedRate}%</h4>
-                      <span className="indicator-card-subtext">Successfully Settled</span>
+                      <span className="indicator-card-subtext">{t('key_municipal_indicators_card1_subtitle')}</span>
                     </div>
                   </Col>
                   
                   <Col xs={12}>
                     <div className="indicator-card-square">
                       <HomeOutlined className="indicator-card-icon" />
-                      <span className="indicator-card-label">Active Contracts</span>
+                      <span className="indicator-card-label">{t('key_municipal_indicators_card2')}</span>
                       <h4 className="indicator-card-value">{totalFunctionalTracks}</h4>
-                      <span className="indicator-card-subtext">Monitored Ward Sites</span>
+                      <span className="indicator-card-subtext">{t('key_municipal_indicators_card2_subtitle')}</span>
                     </div>
                   </Col>
                   
                   <Col xs={12}>
                     <div className="indicator-card-square">
                       <HeartOutlined className="indicator-card-icon" />
-                      <span className="indicator-card-label">Avg Track Completion</span>
+                      <span className="indicator-card-label">{t('key_municipal_indicators_card3')}</span>
                       <h4 className="indicator-card-value">{averageCompletionRate}%</h4>
-                      <span className="indicator-card-subtext">Infrastructure Pace</span>
+                      <span className="indicator-card-subtext">{t('key_municipal_indicators_card3_subtitle')}</span>
                     </div>
                   </Col>
                   
                   <Col xs={12}>
                     <div className="indicator-card-square">
                       <DashboardOutlined className="indicator-card-icon" />
-                      <span className="indicator-card-label">Revenue Target Met</span>
+                      <span className="indicator-card-label">{t('key_municipal_indicators_card4')}</span>
                       <h4 className="indicator-card-value">{Math.round((totalActualRevenue / totalProjectedRevenue) * 100)}%</h4>
-                      <span className="indicator-card-subtext">Collection Efficiency</span>
+                      <span className="indicator-card-subtext">{t('key_municipal_indicators_card4_subtitle')}</span>
                     </div>
                   </Col>
                 </Row>
@@ -203,7 +221,7 @@ export const LandingPage = () => {
                           <WalletOutlined />
                         </div>
                         <div>
-                          <div style={{ fontSize: "13px", fontWeight: 700, color: "#134074" }}>Internal Revenue</div>
+                          <div style={{ fontSize: "13px", fontWeight: 700, color: "#134074" }}>{t('key_municipal_indicators_revenue')}</div>
                           <div style={{ fontSize: "16px", fontWeight: 800, color: "#334155" }}>NPR {totalActualRevenue} Million</div>
                         </div>
                       </div>
@@ -215,7 +233,7 @@ export const LandingPage = () => {
                           <ProjectOutlined />
                         </div>
                         <div>
-                          <div style={{ fontSize: "13px", fontWeight: 700, color: "#134074" }}>Quarter Capital Spent</div>
+                          <div style={{ fontSize: "13px", fontWeight: 700, color: "#134074" }}>{t('key_municipal_indicators_spent')}</div>
                           <div style={{ display: "flex", alignItems: "baseline", gap: "6px" }}>
                             <span style={{ fontSize: "20px", fontWeight: 800, color: "#334155", lineHeight: 1 }}>NPR {totalSpentToDate}M</span>
                             <span style={{ fontSize: "11px", color: "#64748b", fontWeight: 500 }}>Expended Trend</span>

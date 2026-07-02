@@ -9,11 +9,13 @@ import map_en from "./translations/en/map.json";
 import navbar_en from "./translations/en/navbar.json";
 import footer_en from "./translations/en/footer.json";
 import common_en from "./translations/en/common.json";
+import services_en from "./translations/en/services.json";
 
 import navbar_np from "./translations/np/navbar.json";
 import footer_np from "./translations/np/footer.json";
 import common_np from "./translations/np/common.json";
 import map_np from "./translations/np/map.json";
+import services_np from "./translations/np/services.json";
 
 interface RootProps {
   children: ReactNode;
@@ -27,19 +29,21 @@ i18next
     lng: localStorage.getItem("language") || "np",
     fallbackLng: "np",
     defaultNS: "common",
-    fallbackNS: ["common", "navbar", "footer", "map"],
+    fallbackNS: ["common", "navbar", "footer", "map", "services"],
     resources: {
       en: {
         common: common_en,
         map: map_en,
         navbar: navbar_en,
         footer: footer_en,
+        services: services_en,
       },
       np: {
         common: common_np,
         map: map_np,
         navbar: navbar_np,
         footer: footer_np,
+        services: services_np,
       },
     },
   });
