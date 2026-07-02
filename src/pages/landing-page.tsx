@@ -9,7 +9,7 @@ import {
   ProjectOutlined
 } from "@ant-design/icons";
 import "./landing-page.css"; 
-import SiteHeader from "../islands/navigation/site-header";
+// import SiteHeader from "../islands/navigation/site-header";
 import { DynamicChartRenderer } from "./Dashboard/dynamic-chart-renderer";
 import SiteFooter from "../islands/navigation/site-footer";
 import { APP_META_DATA } from "../../config";
@@ -77,7 +77,7 @@ export const LandingPage = () => {
   return (
     <Layout className="layout">
       <div style={{ top: 0, zIndex: 1000, width: "100%", boxShadow: "0 2px 8px rgba(0, 0, 0, 0.04)" }}>
-        <SiteHeader />
+        {/* <SiteHeader /> */}
       </div>
       
       <Content style={{ minHeight: "100vh", backgroundColor: "#f8fafc" }}>

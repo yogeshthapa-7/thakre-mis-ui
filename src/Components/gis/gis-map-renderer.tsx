@@ -854,7 +854,7 @@ export const GisMapRenderer = ({
       
       <div className="w-full flex flex-col gap-2 select-none">
         <div className="px-1">
-          <span className="text-xs font-bold tracking-wider text-slate-400 uppercase">{t("headers.interactive_gis_map", "Interactive GIS Map")}</span>
+          <span className="text-xs font-bold tracking-wider text-slate-400 uppercase">{t("departments.interactive_gis_map", "Interactive GIS Map")}</span>
         </div>
         <div className="w-full h-[450px] bg-[#111625] rounded-xl border border-slate-800/80 overflow-hidden relative shadow-inner">
           <div ref={mapContainerRef} className="w-full h-full z-10" />
@@ -863,7 +863,7 @@ export const GisMapRenderer = ({
 
       <div className="w-full flex flex-col gap-2 select-none">
         <div className="px-1">
-          <span className="text-xs font-bold tracking-wider text-slate-400 uppercase">{t("headers.operational_activity", "Operational Activity Streams")}</span>
+          <span className="text-xs font-bold tracking-wider text-slate-400 uppercase">{t("analytics_view.current_activities", "Current Activities")}</span>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div className="bg-[#1a2232] rounded-xl border border-slate-800/70 p-5 flex flex-col gap-4 shadow-lg">
@@ -900,7 +900,7 @@ export const GisMapRenderer = ({
             <div className="flex items-center justify-between border-b border-slate-800/50 pb-2.5 mb-3">
               <div className="flex items-center gap-2">
                 <span className="text-orange-500 text-base flex items-center justify-center filter drop-shadow-[0_0_4px_rgba(234,88,12,0.5)]"><NotificationOutlined /></span>
-                <span className="text-sm font-bold text-slate-200 tracking-wide uppercase">{t("headers.public_notices", "Public Notices Desk")}</span>
+                <span className="text-sm font-bold text-slate-200 tracking-wide uppercase">{t("analytics_view.public_notice_and_announcements", "Public Notice & Announcements")}</span>
               </div>
               <span className="text-xs text-slate-500 font-mono">{selectedWard ? `${selectedWard} ${t("status.active", "Active")}` : t("status.awaiting_selection", "Awaiting Selection")}</span>
             </div>

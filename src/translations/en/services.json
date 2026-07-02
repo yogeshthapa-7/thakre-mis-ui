@@ -21,7 +21,7 @@
       "submit_request": "Submit Request",
       "location_placeholder": "Enter specific location",
       "description_placeholder": "Describe the issue in detail (e.g. pressure drops, exact pipe dimensions, hazard levels)...",
-      "upload_placeholder": "Click or Drag Asset Photo Here",
+      "upload_placeholder": "Click here to upload issues photo",
       "name_placeholder": "Enter your full name",
       "contact_placeholder": "Enter active phone contact",
       "email_placeholder": "Enter email address"

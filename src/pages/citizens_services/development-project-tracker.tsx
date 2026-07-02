@@ -12,7 +12,7 @@ import {
   DollarCircleOutlined,
   BankOutlined
 } from '@ant-design/icons';
-import SiteHeader from "../../islands/navigation/site-header";
+// import SiteHeader from "../../islands/navigation/site-header";
 import Highcharts from "highcharts";
 import _HighchartsReact from "highcharts-react-official";
 import { useTranslation } from "react-i18next";
@@ -271,7 +271,7 @@ const budgetPieOptions = useMemo(() => ({
 
   return (
     <div className="min-h-screen bg-[#070b12] text-slate-200 antialiased font-sans pb-16 text-base">
-      <SiteHeader />
+      {/* <SiteHeader /> */}
       
       <ConfigProvider theme={{ algorithm: theme.darkAlgorithm, token: { fontSize: 13, controlHeight: 36 } }}>
         <div className="bg-[#0b111e] border-b border-slate-800/60 px-5 py-3 flex flex-col sm:flex-row sm:justify-between items-start sm:items-center gap-3 text-base font-bold text-slate-300 tracking-wide">

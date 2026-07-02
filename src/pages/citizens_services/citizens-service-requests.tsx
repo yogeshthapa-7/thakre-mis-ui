@@ -13,7 +13,7 @@ import {
   BarChartOutlined,
   BankOutlined
 } from '@ant-design/icons';
-import SiteHeader from "../../islands/navigation/site-header";
+// import SiteHeader from "../../islands/navigation/site-header";
 import Highcharts from "highcharts";
 import _HighchartsReact from "highcharts-react-official";
 
@@ -265,7 +265,7 @@ const handleMapIncidentSelect = (marker: MapMarkerData) => {
 
   return (
     <div className="min-h-screen bg-[#070b12] text-slate-200 antialiased selection:bg-blue-600/30 font-sans pb-12 text-base">
-      <SiteHeader />
+      {/* <SiteHeader /> */}
       
       {/* Set explicit global token scaling for Ant Design elements */}
       <ConfigProvider 

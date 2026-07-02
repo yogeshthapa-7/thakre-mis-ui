@@ -9,7 +9,10 @@
     "infrastructure": "Public Infrastructure",
     "government_office": "Government Office",
     "social_service": "Social Service",
-    "finance_and_revenue": "Finance and Revenue"
+    "finance_and_revenue": "Finance and Revenue",
+    "map_panel_left": "Current Activities ",
+    "map_panel_right": "Public Notices & Announcements",
+    "interactive_gis_map": "Interactive GIS Map"
   },
   "sidebar": {
     "title": "Department",
@@ -76,5 +79,16 @@
       "social_service": "Empowerment Workshops & Community Action Rosters (Select a Group to View Activity)",
       "finance_and_revenue": "Revenue Planning Calendars, Audit Windows & Public Filing Deadlines"
     }
-  }
+  },
+   "analytics_view": {
+      "analytics_card1_title": "Daily Patient Visits (by ward)",
+      "analytics_card1_subtitle": "Analytical Summary",
+      "analytics_card1_desc": "This chart shows the number of daily outpatient visits across different wards of Thakre Rural Municipality. Wards 2 and 4 have the highest patient flow, suggesting a greater need for healthcare staff, medicines, and medical resources in these areas.",
+      "analytics_card2_title": "Distribution of Medical Cases by Category",
+      "analytics_card2_subtitle": "Overview Summary",
+      "analytics_card2_desc": "This pie chart shows the distribution of patients by medical service category. Around 75% of all visits are for general treatment and immunization services, highlighting the continued importance of strengthening primary healthcare services in the community.",
+      "current_activities": "Current Activities",
+      "public_notice_and_announcements": "Public Notice & Announcements",
+      "daily_patient_volume": "Daily Patient Volume (by ward area)"
+    }
 }

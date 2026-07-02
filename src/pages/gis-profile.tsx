@@ -16,7 +16,7 @@ import {
   PictureOutlined
 } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
-import SiteHeader from "../islands/navigation/site-header";
+// import SiteHeader from "../islands/navigation/site-header";
 import { GisMapRenderer } from "../Components/gis/gis-map-renderer";
 
 const { Content } = Layout;
@@ -56,7 +56,7 @@ export const GisProfilePage = () => {
 
   return (
     <div className="min-h-screen bg-[#0d111a] flex flex-col font-sans antialiased text-slate-200 selection:bg-blue-500/30">
-      <SiteHeader />
+      {/* <SiteHeader /> */}
       <div className="flex-1 flex overflow-hidden">
         
         <aside 
