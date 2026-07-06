@@ -31,6 +31,7 @@ interface ProjectItem {
   progress: number;
   budget: string;
   spent: string;
+  expendedBudget: string;
   endDate: string;
   contractor: string;
   desc: string;
@@ -66,6 +67,7 @@ const DevelopmentProjectTracker: React.FC = () => {
       progress: 45, 
       budget: '15,200,220',
       spent: '6,840,100',
+      expendedBudget: '6,840,100',
       endDate: 'Dec 25, 2026',
       contractor: 'Thakre Civil Builders Pvt. Ltd.',
       desc: 'Structural masonry and brickwork framework phases are 100% complete. Internal electrical rough-ins and specialized cleanroom medical flooring layouts are currently deferred due to regional logistics variance.' 
@@ -78,6 +80,7 @@ const DevelopmentProjectTracker: React.FC = () => {
       progress: 75, 
       budget: '69,000,000',
       spent: '51,750,000',
+      expendedBudget: '51,750,000',
       endDate: 'Aug 14, 2026',
       contractor: 'Nepal Infrastructure Grading Corp.',
       desc: 'Sub-grade gravel bed compaction and aggregate stabilization tasks have concluded safely. Engineering assets are currently casting reinforced concrete side drain blocks alongside structural retaining walls.' 
@@ -90,6 +93,7 @@ const DevelopmentProjectTracker: React.FC = () => {
       progress: 60, 
       budget: '19,500,000',
       spent: '11,700,000',
+      expendedBudget: '11,700,000',
       endDate: 'Nov 30, 2026',
       contractor: 'Himalayan Hydro-Tech Utilities',
       desc: 'Main intake mountain reservoir container and filtering beds have been erected. Field layout technicians are laying down 4.2 kilometers of high-density distribution pipelines connecting residential clusters.' 
@@ -102,6 +106,7 @@ const DevelopmentProjectTracker: React.FC = () => {
       progress: 20, 
       budget: '11,150,000',
       spent: '2,230,000',
+      expendedBudget: '2,230,000',
       endDate: 'Feb 18, 2027',
       contractor: 'Dhading Co-operative Constructors',
       desc: 'Excavation, piling works, and reinforced foundation columns are currently suspended awaiting modified structural clearance layouts from the central municipal planning board.' 
@@ -266,6 +271,13 @@ const budgetPieOptions = useMemo(() => ({
       key: 'budget',
       width: '180px',
       render: (text: string) => <span className="text-slate-200 font-mono text-xs font-bold block text-right pr-4">{text}</span>,
+    },
+    {
+      title: t('citizens_service.status.expended_budget').toUpperCase(),
+      dataIndex: 'expendedBudget',
+      key: 'expended_budget',
+      width: '180px',
+      render: (text: string) => <span className="text-slate-200 font-mono text-xs font-bold block text-right pr-4">{text}</span>,
     }
   ];
 
@@ -380,6 +392,10 @@ const budgetPieOptions = useMemo(() => ({
                       <span>Progress {project.progress}%</span>
                       <span className="font-mono text-slate-200">{project.budget}</span>
                     </div>
+                    <div className="flex items-center justify-between gap-2">
+                      <span>Expended</span>
+                      <span className="font-mono text-slate-200">{project.expendedBudget}</span>
+                    </div>
 
                     <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-slate-800">
                       <div
@@ -410,7 +426,7 @@ const budgetPieOptions = useMemo(() => ({
                   </div>
                   <div className="flex flex-wrap gap-2">
                     <div className="text-[11px] font-mono bg-slate-900 border border-slate-800 text-slate-400 px-2 py-1.5 rounded-md">
-                      EXPENDED: <span className="text-slate-200 font-bold">NPR {selectedProject.spent}</span>
+                      EXPENDED BUDGET: <span className="text-slate-200 font-bold">NPR {selectedProject.expendedBudget}</span>
                     </div>
                     <div className="text-[11px] font-mono bg-blue-500/10 border border-blue-500/20 text-blue-400 font-bold px-2 py-1.5 rounded-md">
                       TOTAL ALLOCATION: <span className="text-blue-300 font-bold">NPR {selectedProject.budget}</span>
@@ -430,7 +446,7 @@ const budgetPieOptions = useMemo(() => ({
                     </div>
                     <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-800/50">
                       <div>
-                        <span className="text-slate-500 block text-[11px] font-bold uppercase tracking-wider mb-0.5">Target Handover</span>
+                        <span className="text-slate-500 block text-[11px] font-bold uppercase tracking-wider mb-0.5">Final Project Delivery</span>
                         <span className="text-white font-bold">{selectedProject.endDate}</span>
                       </div>
                       <div>

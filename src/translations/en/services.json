@@ -10,7 +10,7 @@
     },
     "form": {
       "title": "Submit a New Citizen Request",
-      "description": "Use this form to register infrastructure issues directly into our live dispatch log. Select an appropriate category, pin down your location or landmark details, and upload an optional photograph to help our municipal response teams review, prioritize, and clear the incident efficiently.",
+      "description": "Use this form to register infrastructure issues directly into our live dispatch log. Choose a category, tell us where it is, and add a photo to help our team find it quickly.",
       "category": "Issue Category",
       "location": "ward",
       "description_label": "Description",
@@ -21,13 +21,13 @@
       "submit_request": "Submit Request",
       "location_placeholder": "Enter specific location",
       "description_placeholder": "Describe the issue in detail (e.g. pressure drops, exact pipe dimensions, hazard levels)...",
-      "upload_placeholder": "Click here to upload issues photo",
+      "upload_placeholder": "Upload the photo of problem Here",
       "name_placeholder": "Enter your full name",
       "contact_placeholder": "Enter active phone contact",
       "email_placeholder": "Enter email address"
     },
     "feed": {
-      "title": "Live Dispatch Feed",
+      "title": "Ward Issue Updates",
       "active_records": "Active Records",
       "empty_state": "Select an entry from the live dispatch streams to inspect deep details."
     },
@@ -37,9 +37,9 @@
       "in_progress": "Current Status",
       "in_progress_desc": "Current issues being addressed",
       "resolved": "Resolved",
-      "resolved_desc": "Successfully closed dispatches",
-      "pending": "Pending Alerts",
-      "pending_desc": "High-priority emergency alerts"
+      "resolved_desc": "Successfully resolved issues",
+      "pending": "Critical Issues",
+      "pending_desc": "Urgent Fixes Needed"
     },
     "filters": {
       "infrastructure": "Infrastructure",
@@ -54,18 +54,18 @@
       "panel_title": "Project Names",
       "responsible_department": "Responsible Department",
       "assigned_resource": "Assigned Resource",
-      "issue_assessment": "Issue Assessment",
+      "issue_assessment": "Current Update",
       "resolution_target_steps": "RESOLUTION TARGET STEPS",
-      "activity_log": "Activity Transmission Log"
+      "activity_log": "Latest Updates"
     },
     "charts": {
-      "category_allocation_title": "Category Allocation Distribution",
+      "category_allocation_title": "Reports by Category",
       "category_allocation_summary": "Breaks down live incident volume by category. Waste management leads with 35% of active reports, followed by roads at 25%, with water and power each contributing 20%.",
-      "monthly_inflow_title": "Physical Progress",
+      "monthly_inflow_title": "Monthly Report Volume",
       "monthly_inflow_summary": "Shows incident reports over January–April. Volume rose from 120 in January to 185 in February, dipped to 140 in March, then climbed to a peak of 210 in April.",
       "turnaround_title": "Incident Resolution Times",
       "turnaround_summary": "Compares average resolution times by issue type. Roads average 48 hours, water 72 hours, waste 24 hours, and power repairs are shown at 12 hours.",
-      "ward_performance_title": "Ward Operations Performance Mapping",
+      "ward_performance_title": "Active Requests by Wards",
       "ward_performance_summary": "Shows active request distribution by ward. Ward 7 carries the largest share at 45%, followed by Wards 4 and 9 at 20% each, and Ward 3 at 15%."
     }
     ,
@@ -101,7 +101,8 @@
       "delayed": "Delayed",
       "completed": "Completed",
       "in_progress": "In Progress",
-      "allocated_budget": "Allocated Budget"
+      "allocated_budget": "Allocated Budget",
+      "expended_budget": "Expended Budget"
     }
   }
 }

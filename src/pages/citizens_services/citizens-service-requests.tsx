@@ -157,7 +157,7 @@ const CitizensServiceRequests: React.FC = () => {
       time: 'Yesterday', 
       priority: 'Low',
       department: 'Infrastructure & Electrical Dept',
-      assignedTo: 'Municipal Grid Maintenance Team C',
+      assignedTo: 'Local Electric Crew',
       progress: 0,
       sub: 'Street light maintenance work is scheduled for later due to severe heavy rainfall compromising safe overhead ladder and wiring conditions.',
       timeline: [
