@@ -70,7 +70,7 @@ const DevelopmentProjectTracker: React.FC = () => {
       expendedBudget: '6,840,100',
       endDate: 'Dec 25, 2026',
       contractor: 'Thakre Civil Builders Pvt. Ltd.',
-      desc: 'Structural masonry and brickwork framework phases are 100% complete. Internal electrical rough-ins and specialized cleanroom medical flooring layouts are currently deferred due to regional logistics variance.' 
+      desc: 'The brickwork and structural walls are completely finished. However, installing the internal wiring and specialized medical flooring has been delayed due to regional shipping and logistics issues.' 
     },
     { 
       id: 2, 
@@ -83,7 +83,7 @@ const DevelopmentProjectTracker: React.FC = () => {
       expendedBudget: '51,750,000',
       endDate: 'Aug 14, 2026',
       contractor: 'Nepal Infrastructure Grading Corp.',
-      desc: 'Sub-grade gravel bed compaction and aggregate stabilization tasks have concluded safely. Engineering assets are currently casting reinforced concrete side drain blocks alongside structural retaining walls.' 
+      desc: 'The ground prep work—including gravel leveling and stabilizing the base—is successfully complete. The team is now pouring reinforced concrete side drains along the structural retaining walls' 
     },
     { 
       id: 3, 
@@ -96,7 +96,7 @@ const DevelopmentProjectTracker: React.FC = () => {
       expendedBudget: '11,700,000',
       endDate: 'Nov 30, 2026',
       contractor: 'Himalayan Hydro-Tech Utilities',
-      desc: 'Main intake mountain reservoir container and filtering beds have been erected. Field layout technicians are laying down 4.2 kilometers of high-density distribution pipelines connecting residential clusters.' 
+      desc: 'The main mountain reservoir tank and its filtering beds are now fully built. The field team is currently laying down 4.2 kilometers of heavy-duty water pipelines to connect nearby neighborhoods.' 
     },
     { 
       id: 4, 
@@ -109,7 +109,7 @@ const DevelopmentProjectTracker: React.FC = () => {
       expendedBudget: '2,230,000',
       endDate: 'Feb 18, 2027',
       contractor: 'Dhading Co-operative Constructors',
-      desc: 'Excavation, piling works, and reinforced foundation columns are currently suspended awaiting modified structural clearance layouts from the central municipal planning board.' 
+      desc: 'Digging, piling, and foundation work are temporarily on hold while we wait for the central planning board to approve the updated structural designs.' 
     }
   ], []);
 
@@ -135,10 +135,10 @@ const DevelopmentProjectTracker: React.FC = () => {
   }, [developmentProjects]);
 
 const metricCards: MetricCardItem[] = useMemo(() => [
-    { title: t('citizens_service.metrics.total_requests'), val: '28', desc: t('citizens_service.dev_tracker.metrics.active_projects_desc'), icon: <ContainerOutlined className="text-blue-400 text-lg" />, color: 'text-white' },
-    { title: t('citizens_service.metrics.in_progress'), val: '14', desc: t('citizens_service.dev_tracker.metrics.active_sectors_desc'), icon: <DashboardOutlined className="text-amber-400 text-lg" />, color: 'text-amber-400' },
+    { title: t('citizens_service.metrics.total_projects'), val: '28', desc: t('citizens_service.dev_tracker.metrics.active_projects_desc'), icon: <ContainerOutlined className="text-blue-400 text-lg" />, color: 'text-white' },
+    { title: t('citizens_service.metrics.active_sector'), val: '14', desc: t('citizens_service.dev_tracker.metrics.active_sectors_desc'), icon: <DashboardOutlined className="text-amber-400 text-lg" />, color: 'text-amber-400' },
     { title: t('citizens_service.charts.monthly_inflow_title'), val: '65.2%', desc: t('citizens_service.dev_tracker.metrics.expenditure_ratio_desc'), icon: <DollarCircleOutlined className="text-green-400 text-lg" />, color: 'text-green-400' },
-    { title: t('citizens_service.metrics.pending'), val: '4', desc: t('citizens_service.dev_tracker.metrics.delayed_projects_desc'), icon: <WarningFilled className="text-red-400 text-lg" />, color: 'text-red-400' }
+    { title: t('citizens_service.metrics.delayed_projects'), val: '4', desc: t('citizens_service.dev_tracker.metrics.delayed_projects_desc'), icon: <WarningFilled className="text-red-400 text-lg" />, color: 'text-red-400' }
   ], [t]);
 
   const handleMapProjectSelect = (marker: any) => {
@@ -224,7 +224,7 @@ const budgetPieOptions = useMemo(() => ({
 
   const columns = [
     {
-      title: t('citizens_service.details.panel_title').toUpperCase(),
+      title: t('citizens_service.details.column_title').toUpperCase(),
       dataIndex: 'name',
       key: 'name',
       render: (text: string) => <span className="font-bold text-white text-xs tracking-wide">{text}</span>,
@@ -252,7 +252,7 @@ const budgetPieOptions = useMemo(() => ({
         },
     },
     {
-      title: t('citizens_service.charts.monthly_inflow_title').toUpperCase(),
+      title: t('citizens_service.metrics.physical_progress').toUpperCase(),
       dataIndex: 'progress',
       key: 'progress',
       width: '240px',
@@ -270,14 +270,14 @@ const budgetPieOptions = useMemo(() => ({
       dataIndex: 'budget',
       key: 'budget',
       width: '180px',
-      render: (text: string) => <span className="text-slate-200 font-mono text-xs font-bold block text-right pr-4">{text}</span>,
+      render: (text: string) => <span className="text-slate-200 font-mono text-xs font-bold block text-right pr-4">NPR. {text}</span>,
     },
     {
       title: t('citizens_service.status.expended_budget').toUpperCase(),
       dataIndex: 'expendedBudget',
       key: 'expended_budget',
       width: '180px',
-      render: (text: string) => <span className="text-slate-200 font-mono text-xs font-bold block text-right pr-4">{text}</span>,
+      render: (text: string) => <span className="text-slate-200 font-mono text-xs font-bold block text-right pr-4">NPR. {text}</span>,
     }
   ];
 
@@ -425,23 +425,23 @@ const budgetPieOptions = useMemo(() => ({
                     </p>
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    <div className="text-[11px] font-mono bg-slate-900 border border-slate-800 text-slate-400 px-2 py-1.5 rounded-md">
+                    <div className="text-[11px] font-mono bg-red-700/100 border border-slate-800 text-slate-400 px-2 py-1.5 rounded-md">
                       EXPENDED BUDGET: <span className="text-slate-200 font-bold">NPR {selectedProject.expendedBudget}</span>
                     </div>
-                    <div className="text-[11px] font-mono bg-blue-500/10 border border-blue-500/20 text-blue-400 font-bold px-2 py-1.5 rounded-md">
-                      TOTAL ALLOCATION: <span className="text-blue-300 font-bold">NPR {selectedProject.budget}</span>
+                    <div className="text-[11px] font-mono bg-green-700/100 border border-blue-500/20 text-black font-bold px-2 py-1.5 rounded-md">
+                      ALLOCATED BUDGET: <span className="text-blue-300 font-bold">NPR {selectedProject.budget}</span>
                     </div>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
                   <div className="lg:col-span-2 space-y-2">
-                    <span className="text-slate-500 block text-[11px] font-bold uppercase tracking-wider">Field Operations Summary & Milestone Assessment Log</span>
+                    <span className="text-slate-500 block text-[11px] font-bold uppercase tracking-wider">Project Progress Remarks Notes</span>
                     <p className="text-xs text-slate-300 leading-relaxed font-normal bg-[#0b111e]/50 p-3 rounded-lg border border-slate-800/40">{selectedProject.desc}</p>
                   </div>
                   <div className="space-y-3 bg-[#0b111e]/40 p-3 rounded-lg border border-slate-800/40 text-xs">
                     <div>
-                      <span className="text-slate-500 block text-[11px] font-bold uppercase tracking-wider mb-0.5">Assigned Lead Contractor Corporation</span>
+                      <span className="text-slate-500 block text-[11px] font-bold uppercase tracking-wider mb-0.5">Lead Contractor</span>
                       <span className="text-slate-200 font-bold tracking-wide">{selectedProject.contractor}</span>
                     </div>
                     <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-800/50">

@@ -85,7 +85,7 @@ const CitizensServiceRequests: React.FC = () => {
     time: '30 mins ago', 
     priority: 'High',
     department: 'Water Supply & Sanitation',
-    assignedTo: 'Emergency Engineering Crew B',
+    assignedTo: 'Emergency Water Repair Crew',
     progress: 35,
     sub: 'A major pressure variance was logged on the 14-inch distribution mainline. Field agents confirmed a seam blowout causing localized street flooding.',
     timeline: [
@@ -111,7 +111,7 @@ const CitizensServiceRequests: React.FC = () => {
       time: '30 mins ago', 
       priority: 'High',
       department: 'Water Supply & Sanitation',
-      assignedTo: 'Emergency Engineering Crew B',
+      assignedTo: 'Water Pipe Repair Team',
       progress: 35,
       sub: 'A major pressure variance was logged on the 14-inch distribution mainline. Field agents confirmed a seam blowout causing localized street flooding and low pressure across 120 households.',
       timeline: [
@@ -127,7 +127,7 @@ const CitizensServiceRequests: React.FC = () => {
       time: '1 hour ago', 
       priority: 'Medium',
       department: 'Infrastructure & Road Roads Dept',
-      assignedTo: 'Municipal Asphalt Contractors Team 1',
+      assignedTo: 'Road Repair Team',
       progress: 75,
       sub: 'Routine repair of road surfaces along school bus transport route. Sub-base compaction completed; currently applying the primary weather-seal coat.',
       timeline: [
@@ -142,7 +142,7 @@ const CitizensServiceRequests: React.FC = () => {
       time: 'Yesterday', 
       priority: 'Low',
       department: 'Waste Management & Environment',
-      assignedTo: 'Sanitation Division Crew A',
+      assignedTo: 'Waste Managemnt Team',
       progress: 100,
       sub: 'Cleared 4.2 metric tons of mixed solid household and industrial debris dumped unlawfully near the river conservation buffers. Installed warning placards.',
       timeline: [
@@ -543,7 +543,7 @@ const handleMapIncidentSelect = (marker: MapMarkerData) => {
               {/* Enhanced Update Details */}
               <div className="bg-[#101726] border border-slate-800/80 rounded-xl p-4 shadow-[0_15px_35px_rgba(0,0,0,0.6)] flex-1 flex flex-col">
                 <h3 className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-3 pb-2 border-b border-slate-800/50">
-                  {t('citizens_service.details.panel_title')}
+                  {t('citizens_service.feed.details')}
                 </h3>
                 
                 <div className="max-h-[320px] overflow-y-auto flex-1 custom-scrollbar pr-1">
