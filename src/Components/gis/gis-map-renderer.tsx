@@ -86,7 +86,7 @@ const DEPARTMENT_DATABASE: Record<string, DepartmentData> = {
     ],
     primaryChart: {
       type: "column",
-      title: "Daily Patient Volume Analysis (By Ward Area)",
+      title: "Patient Visits by Ward or Daily Patient Turnout",
       yAxisLabel: "Patients Count",
       seriesName: "Outpatients Visited",
       categories: ["Ward 1", "Ward 2", "Ward 3", "Ward 4", "Ward 5", "Ward 6", "Ward 7", "Ward 8", "Ward 9", "Ward 10", "Ward 11"],
@@ -98,11 +98,11 @@ const DEPARTMENT_DATABASE: Record<string, DepartmentData> = {
       },
       color: "#ef4444",
       gradientTo: "rgba(239, 68, 68, 0.1)",
-      description: "This bar chart logs real-time outpatient distribution across Thakre's administrative divisions. High peaks in Ward 2 and Ward 4 indicate higher medical resource demand, highlighting where additional staffing or medical supplies should be assigned."
+      description: "This bar chart logs real-time outpatient distribution across Thakre's administrative divisions. High peaks in Ward 2 and Ward 4 indicate higher medical resource demand, highlighting where additional staff or medical supplies should be provided."
     },
     secondaryChart: {
       type: "pie",
-      title: "Medical Case Category Distribution Breakdown",
+      title: "Types of Care Provided",
       seriesName: "Share",
       data: [
         { name: "General Checkup", y: 45, color: "#3b82f6" },
@@ -130,7 +130,7 @@ const DEPARTMENT_DATABASE: Record<string, DepartmentData> = {
           { name: "Emergency & Trauma Response", y: 10, color: "#f59e0b" }
         ]
       },
-      description: "This structural pie chart breaks down current clinic use by case category. General and preventative immunization care account for 75% of local caseloads, establishing that primary community care infrastructure remains our highest long-term funding priority."
+      description: "This breakdown shows what types of care patients are receiving. General checkups and routine immunizations make up 75% of local clinic visits, proving that investing in primary community care remains our most important long-term goal."
     }
   },
   education: {
@@ -972,7 +972,7 @@ export const GisMapRenderer = ({
               <HighchartsReact highcharts={Highcharts} options={primaryChartOptions} immutable={true} />
             </div>
             <div className="bg-[#151d2a] border border-slate-800/40 rounded-lg p-3.5">
-              <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">{t("headers.analytical_insights", "Analytical Insights Summary")}</div>
+              <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">{t("headers.analytical_insights", "Key Takeways :")}</div>
               <p className="text-sm text-slate-400 m-0 leading-relaxed">{selectedWard ? t("messages.tracking_metrics", { ward: selectedWard, defaultValue: "Currently tracking targeted metrics for {{ward}}." }) : data.primaryChart.description}</p>
             </div>
           </div>
@@ -981,7 +981,7 @@ export const GisMapRenderer = ({
               <HighchartsReact highcharts={Highcharts} options={secondaryChartOptions} immutable={true} />
             </div>
             <div className="bg-[#151d2a] border border-slate-800/40 rounded-lg p-3.5">
-              <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">{t("headers.structural_overview", "Structural Overview Summary")}</div>
+              <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">{t("headers.structural_overview", "Resource Focus :")}</div>
               <p className="text-sm text-slate-400 m-0 leading-relaxed">{data.secondaryChart.description}</p>
             </div>
           </div>

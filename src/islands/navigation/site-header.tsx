@@ -7,7 +7,13 @@ import { NavbarLinkData } from "./navbar-links";
 import styles from "./navbar-dropdown.module.css";
 import { useTranslation } from "react-i18next";
 import { APP_META_DATA } from "../../../config";
+import React from "react";
 
+// Import the raw module with an alias name first
+import RawMarquee from "react-fast-marquee";
+
+// Safely unpack the component for Vite, and cast to 'any' to stop TypeScript from complaining
+const Marquee = ((RawMarquee as any).default || RawMarquee) as React.ComponentType<any>;
 const { Header } = Layout;
 
 export const SiteHeader = () => {
@@ -53,6 +59,21 @@ export const SiteHeader = () => {
     return translated;
   };
 
+  const notices = [
+  "१. राष्ट्रिय आयोजना बैंक व्यवस्थापन सूचना प्रणाली (NPBMIS) मा आयोजना प्रविष्टिका लागि म्याद थप सम्बन्धी जरुरी सूचना ।",
+  "२. आर्थिक वर्ष २०८३/८४ का लागि योजना तथा कार्यक्रम प्रस्ताव पेश गर्ने सम्बन्धी सूचना ।",
+  "३. सामाजिक सुरक्षा भत्ता प्राप्त गर्ने लाभग्राहीहरूको विवरण अद्यावधिक गर्ने सम्बन्धी जरुरी सूचना ।",
+  "४. कर तिर्ने सम्बन्धी जरुरी सूचना ।",
+  "५. जन्म, मृत्यु तथा विवाह दर्ता अद्यावधिक गर्ने सम्बन्धी सूचना ।",
+];
+
+  // Helper function to handle language toggle logic cleanly
+  const toggleLanguage = () => {
+    const nextLang = language === "np" ? "en" : "np";
+    i18next.changeLanguage(nextLang);
+    localStorage.setItem("language", nextLang);
+  };
+
   return (
     <Header style={{ width: "100%", height: "auto", padding: 0, background: "#fff", lineHeight: "normal" }}>
       {/* 1. TOP BANNER */}
@@ -94,15 +115,17 @@ export const SiteHeader = () => {
             <span className="shrink-0 bg-amber-500 text-slate-900 font-bold text-xs uppercase px-2 py-1 rounded shadow-sm mr-2 z-10">
               {navText("Notice")}
             </span>
-            <div className={styles.noticeTickerContainer}>
-              <div className={`${styles.tickerWrapper} text-sm font-medium tracking-wide`} style={{ color: "#ffffff" }}>
-                <span className="mx-4">१. राष्ट्रीय आयोजना बैंक व्यवस्थापन सूचना प्रणाली (NPBMIS) मा आयोजना प्रविष्टिका लागि म्याद थप सम्बन्धी जरुरी सूचना !</span>
-                <span className="mx-4">|</span>
-                <span className="mx-4">२. आर्थिक वर्ष २०८३/८४ का लागि योजना तथा कार्यक्रम प्रस्ताव पेश गर्ने सम्बन्धी सूचना !</span>
-                <span className="mx-4">|</span>
-                <span className="mx-4">३. सामाजिक सुरक्षा भत्ता प्राप्त गर्ने लाभग्राहीहरूको विवरण अद्यावधिक गर्ने सम्बन्धी जरुरी सूचना !</span>
-              </div>
-            </div>
+            <Marquee pauseOnHover speed={60}>
+  {notices.map((notice, index) => (
+    <React.Fragment key={index}>
+      <span className="mx-4">{notice}</span>
+
+      {index !== notices.length - 1 && (
+        <span className="mx-4">|</span>
+      )}
+    </React.Fragment>
+  ))}
+</Marquee>
           </div>
 
           {/* Right Block: Live Date Widget & Flag */}
@@ -172,50 +195,47 @@ export const SiteHeader = () => {
             )}
           </div>
 
-          {/* Right Action Items: Language Toggle */}
+          {/* Right Action Items: Language Pill-style Toggle Container */}
           <div className="hidden lg:flex items-center gap-4">
-            <Dropdown
-              menu={{
-                items: [
-                  { key: "np", label: "नेपाली" },
-                  { key: "en", label: "English" },
-                ],
-                onClick: ({ key }) => {
-                  i18next.changeLanguage(key);
-                  localStorage.setItem("language", key);
-                },
-              }}
-              trigger={["click"]}
+            <button
+              onClick={toggleLanguage}
+              type="button"
+              className="relative w-20 h-8 flex items-center bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-full p-1 cursor-pointer transition-all duration-300 select-none shadow-inner"
+              title={language === "np" ? "Switch to English" : "नेपालीमा बदल्नुहोस्"}
             >
-              <Button
-                type="text"
-                className="flex items-center gap-1 border border-gray-200 hover:border-blue-400 rounded-full font-bold text-xs px-4 bg-white text-slate-700"
-              >
-                {language === "np" ? "NEP" : "ENG"}
-                <DownOutlined className="text-[8px] opacity-60" />
-              </Button>
-            </Dropdown>
+              {/* Sliding Background Highlight Pill */}
+              <div
+                className={`absolute top-0.5 bottom-0.5 w-[36px] bg-white rounded-full shadow-md border border-gray-200 transition-all duration-300 ease-in-out ${
+                  language === "np" ? "left-0.5" : "left-[calc(100%-38px)]"
+                }`}
+              />
+              
+              {/* Text Layout Alignment Container */}
+              <div className="absolute inset-0 flex justify-between items-center px-2.5 text-[10px] font-bold text-slate-600 pointer-events-none">
+                <span className={language === "np" ? "text-blue-600 font-extrabold" : "opacity-60"}>नेपा</span>
+                <span className={language === "en" ? "text-blue-600 font-extrabold" : "opacity-60"}>EN</span>
+              </div>
+            </button>
           </div>
 
-          {/* Mobile Actions Container */}
+          {/* Mobile Actions Container with Quick Toggle Pill */}
           <div className="lg:hidden flex items-center gap-2">
-            <Dropdown
-              menu={{
-                items: [
-                  { key: "np", label: "नेपाली" },
-                  { key: "en", label: "English" },
-                ],
-                onClick: ({ key }) => {
-                  i18next.changeLanguage(key);
-                  localStorage.setItem("language", key);
-                },
-              }}
-              trigger={["click"]}
+            <button
+              onClick={toggleLanguage}
+              type="button"
+              className="relative w-16 h-7 flex items-center bg-gray-100 border border-gray-300 rounded-full p-0.5 cursor-pointer transition-all duration-300 select-none"
             >
-              <Button size="small" type="text" className="border border-gray-200 rounded-full font-bold text-xs">
-                {language === "np" ? "ने" : "EN"}
-              </Button>
-            </Dropdown>
+              <div
+                className={`absolute top-0.5 bottom-0.5 w-[28px] bg-white rounded-full shadow border border-gray-200 transition-all duration-300 ease-in-out ${
+                  language === "np" ? "left-0.5" : "left-[calc(100%-30px)]"
+                }`}
+              />
+              <div className="absolute inset-0 flex justify-between items-center px-2 text-[9px] font-bold text-slate-600 pointer-events-none">
+                <span className={language === "np" ? "text-blue-600 font-extrabold" : "opacity-50"}>नेपा</span>
+                <span className={language === "en" ? "text-blue-600 font-extrabold" : "opacity-50"}>EN</span>
+              </div>
+            </button>
+
             <Button
               type="text"
               icon={<MenuOutlined />}
