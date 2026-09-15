@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Layout, Tooltip } from "antd";
 import {
   BookOutlined,
@@ -51,8 +51,23 @@ const MAP_VIEWS = [
 export const GisProfilePage = () => {
   const { t } = useTranslation("map");
   const [activeDept, setActiveDept] = useState<string>("health");
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(() => {
+    if (typeof window !== "undefined") {
+      return window.innerWidth < 768;
+    }
+    return false;
+  });
   const [mapView, setMapView] = useState<"osm" | "satellite">("osm");
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setIsCollapsed(true);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#0d111a] flex flex-col font-sans antialiased text-slate-200 selection:bg-blue-500/30">
@@ -60,7 +75,7 @@ export const GisProfilePage = () => {
       <div className="flex-1 flex overflow-hidden">
         
         <aside 
-          className={`bg-[#0f1422] border-r border-slate-800/70 flex flex-col transition-all duration-300 relative shadow-2xl z-[1010] ${
+          className={`bg-[#0f1422] border-r border-slate-800/70 flex flex-col transition-all duration-300 relative shadow-2xl z-20 md:z-[1010] ${
             isCollapsed ? "w-[70px]" : "w-[290px]"
           }`}
         >
