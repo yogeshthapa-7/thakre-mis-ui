@@ -602,6 +602,7 @@ export const GisMapRenderer = ({
   const [selectedWard, setSelectedWard] = useState<string | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const [selectedMarker, setSelectedMarker] = useState<MarkerData | null>(null);
+  const [chartHeight, setChartHeight] = useState<number>(260);
 
   const data = useMemo(() => {
     const base = DEPARTMENT_DATABASE[activeDepartment] || DEPARTMENT_DATABASE["health"];
@@ -635,6 +636,15 @@ export const GisMapRenderer = ({
     if (!selectedWard) return [];
     return data.notices.filter((n) => n.ward.toLowerCase() === selectedWard.toLowerCase());
   }, [selectedWard, data]);
+
+  useEffect(() => {
+    const updateChartHeight = () => {
+      setChartHeight(window.innerWidth < 768 ? 320 : 260);
+    };
+    updateChartHeight();
+    window.addEventListener("resize", updateChartHeight);
+    return () => window.removeEventListener("resize", updateChartHeight);
+  }, []);
 
   useEffect(() => {
     if (!mapRef.current) return;
@@ -817,7 +827,7 @@ export const GisMapRenderer = ({
     const baseData = hasWardData ? data.primaryChart.wardData![selectedWard] : data.primaryChart.data;
     const chartData = baseData.map((val, idx) => ({ y: val, color: selectedWard && data.primaryChart.categories[idx].toLowerCase() === selectedWard.toLowerCase() ? "#ffffff" : data.primaryChart.color }));
     return {
-      chart: { type: data.primaryChart.type, backgroundColor: "transparent", height: 240, spacingBottom: 5, style: { fontFamily: "sans-serif" } },
+      chart: { type: data.primaryChart.type, backgroundColor: "transparent", height: chartHeight, spacingBottom: 5, style: { fontFamily: "sans-serif" } },
       title: { text: selectedWard ? `${data.primaryChart.title} — Active: ${selectedWard}` : data.primaryChart.title, align: "left", style: { color: "#cbd5e1", fontSize: "14px", fontWeight: "600" } },
       xAxis: { categories: data.primaryChart.categories, labels: { style: { color: "#64748b", fontSize: "11px" } }, lineColor: "#334155", tickWidth: 0 },
       yAxis: { title: { text: data.primaryChart.yAxisLabel, style: { color: "#64748b", fontSize: "11px" } }, labels: { style: { color: "#475569", fontSize: "11px" } }, gridLineColor: "#1e293b", gridLineDashStyle: "Dash" as any },
@@ -838,7 +848,7 @@ export const GisMapRenderer = ({
       chartData = baseData.map((item: any) => ({ ...item, sliced: false }));
     }
     return {
-      chart: { type: data.secondaryChart.type, backgroundColor: "transparent", height: 240, spacingBottom: 5, style: { fontFamily: "sans-serif" } },
+      chart: { type: data.secondaryChart.type, backgroundColor: "transparent", height: chartHeight, spacingBottom: 5, style: { fontFamily: "sans-serif" } },
       title: { text: selectedWard ? `${data.secondaryChart.title} (${selectedWard} Distribution)` : data.secondaryChart.title, align: "left", style: { color: "#cbd5e1", fontSize: "14px", fontWeight: "600" } },
       xAxis: data.secondaryChart.type !== "pie" ? { categories: ["Ward 1", "Ward 2", "Ward 3", "Ward 4", "Ward 5", "Ward 6", "Ward 7", "Ward 8", "Ward 9", "Ward 10", "Ward 11"], labels: { style: { color: "#64748b", fontSize: "11px" } }, lineColor: "#334155" } : undefined,
       yAxis: { title: { text: null }, labels: { enabled: data.secondaryChart.type !== "pie" }, gridLineColor: "#1e293b" },
@@ -881,15 +891,15 @@ export const GisMapRenderer = ({
                   <button
                     key={idx}
                     onClick={() => setSelectedWard(sched.label)}
-                    className={`w-full text-left p-3.5 rounded-lg border flex items-center justify-between transition-all duration-150 cursor-pointer ${
+                    className={`w-full text-left p-3.5 rounded-lg border flex items-center justify-between transition-all duration-150 cursor-pointer overflow-hidden ${
                       isSelected ? "bg-[#1e2d4a] border-blue-500/80 shadow-[0_0_12px_rgba(59,130,246,0.15)] text-white" : "bg-[#222c3f] border-slate-800/60 hover:bg-[#2a374e] hover:border-slate-700 text-slate-200"
                     }`}
                   >
-                    <div className="flex items-center gap-4">
-                      <span className={`text-sm font-mono font-bold px-2 py-0.5 rounded border ${isSelected ? "bg-blue-600 text-white border-blue-400" : "bg-[#121824] text-slate-400 border-slate-800/60"}`}>{sched.label}</span>
-                      <span className="text-sm font-medium tracking-wide">{sched.name}</span>
+                    <div className="flex items-center gap-4 min-w-0">
+                      <span className={`text-sm font-mono font-bold px-2 py-0.5 rounded border shrink-0 ${isSelected ? "bg-blue-600 text-white border-blue-400" : "bg-[#121824] text-slate-400 border-slate-800/60"}`}>{sched.label}</span>
+                      <span className="text-sm font-medium tracking-wide truncate">{sched.name}</span>
                     </div>
-                    <span className={`text-xs font-bold px-2 py-0.5 rounded ${sched.urgent ? 'text-red-400 bg-red-500/10 border border-red-500/20' : 'text-slate-400 bg-slate-800'}`}>{sched.time}</span>
+                    <span className={`text-xs font-bold px-2 py-0.5 rounded shrink-0 ${sched.urgent ? 'text-red-400 bg-red-500/10 border border-red-500/20' : 'text-slate-400 bg-slate-800'}`}>{sched.time}</span>
                   </button>
                 );
               })}
