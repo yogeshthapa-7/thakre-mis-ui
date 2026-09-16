@@ -8,5 +8,5 @@ export const NavbarLinkData = [
       { labelKey: "tools.development_project_tracker", url: "/citizens_services/development-project-tracker" },
     ],
   },
-  { labelKey: "Data_Collection", target: "_blank", url: "https://datacollectionui.soft-acc.com/" },
+  { labelKey: "Data_Collection", target: "_blank", url: "https://data-collection-api.dev.himalayankasturi.com.np/" },
 ];
