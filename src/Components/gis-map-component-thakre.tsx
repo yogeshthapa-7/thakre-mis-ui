@@ -51,7 +51,7 @@ export const GisMap = ({
     }).setView([27.712, 85.025], 12);
 
     // Build the structural base layer definitions instantly on setup
-    const osmLayer = L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+    const osmLayer = L.tileLayer(`https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key=${import.meta.env.VITE_CARTO_API_KEY}`, {
       attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
       maxZoom: 20
     });

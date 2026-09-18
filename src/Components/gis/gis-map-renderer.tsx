@@ -656,7 +656,7 @@ export const GisMapRenderer = ({
     const tileUrl =
       mapView === "satellite"
         ? "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-        : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png";
+        : `https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key=${import.meta.env.VITE_CARTO_API_KEY}`;
 
     const attribution =
       mapView === "satellite"
@@ -675,7 +675,7 @@ export const GisMapRenderer = ({
       attributionControl: false
     }).setView([27.712, 85.025], 12);
 
-    const initialLayer = L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png").addTo(map);
+    const initialLayer = L.tileLayer(`https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key=${import.meta.env.VITE_CARTO_API_KEY}`).addTo(map);
     tileLayerRef.current = initialLayer;
     L.control.zoom({ position: "topright" }).addTo(map);
 
